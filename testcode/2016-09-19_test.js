@@ -13,10 +13,15 @@ let numShoes;
 
 function main(){
 	setNumShoes();
+	printNumShoes();
 }
 
 main();
 
 function setNumShoes(){
 	numShoes = PROMPT.question('\nEnter the number of shoes: ');
+}
+
+function printNumShoes(){
+	console.log(`The number of shoes is ${numShoes}`);
 }
