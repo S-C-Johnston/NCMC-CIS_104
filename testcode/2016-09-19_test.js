@@ -10,10 +10,14 @@
 const PROMPT = require('readline-sync');
 
 let numShoes;
+let lastName, firstName;
 
 function main(){
 	setNumShoes();
+	setFirstName();
+	setLastName();
 	printNumShoes();
+	printName();
 }
 
 main();
@@ -24,4 +28,16 @@ function setNumShoes(){
 
 function printNumShoes(){
 	console.log(`The number of shoes is ${numShoes}`);
+}
+
+function setFirstName(){
+	firstName = PROMPT.question('\nEnter your first name: ');
+}
+
+function setLastName(){
+	lastName = PROMPT.question('\nEnter your last name: ');
+}
+
+function printName(){
+	console.log(`Your name is ${firstName} ${lastName}`);
 }
