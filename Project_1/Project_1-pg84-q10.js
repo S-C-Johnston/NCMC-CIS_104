@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  *	@Author: Stewart Johnston <johnstons1@student.ncmich.edu>
- *	@Version: 2016.09.26.01
+ *	@Version: 2016.09.26.03
  *	@Summary: Project One, River Falls Construction Company customer lot configuration | Created 2016-09-26
  *	@Todo
  */
@@ -20,7 +20,7 @@ function main() {
 	setGarageCapacity();
 	setTotalLotPrice();
 	configurationReview();
-	setTimeout(printGoodbye(), 30);
+	setTimeout(printGoodbye, 30000);
 }
 
 main();
@@ -31,7 +31,7 @@ function printWelcome() {
 }
 
 function setLotNumber() {
-	lotnumber = Number(PROMPT.question(`\nPlease enter your lot number: `));
+	lotNumber = Number(PROMPT.question(`\nPlease enter your lot number: `));
 	console.log(`\n\nLoading River Falls lot ${lotNumber} ... `);
 }
 
