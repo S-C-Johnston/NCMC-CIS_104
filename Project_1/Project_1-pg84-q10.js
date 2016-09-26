@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
  *	@Author: Stewart Johnston <johnstons1@student.ncmich.edu>
- *	@Version: 2016.09.26.03
+ *	@Version: 1.0 | 1.0 declared feature complete 2016-09-26:H:15:34
  *	@Summary: Project One, River Falls Construction Company customer lot configuration | Created 2016-09-26
- *	@Todo
+ *	@Todo:
  */
 
 "use strict";
