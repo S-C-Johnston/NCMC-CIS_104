@@ -10,7 +10,10 @@
 const PROMPT = require('readline-sync');
 
 let lotNumber, numBedrooms, numBathrooms, garageCapacity, totalLotPrice;
-const PRICE_LOT = 50000, PRICE_BEDROOM = 17000, PRICE_BATHROOM = 12500, PRICE_GARAGE_CAR_CAPACITY = 6000;
+const PRICE_LOT = 50000;
+const PRICE_BEDROOM = 17000;
+const PRICE_BATHROOM = 12500;
+const PRICE_GARAGE_CAR_CAPACITY = 6000;
 
 function main() {
 	printWelcome();
