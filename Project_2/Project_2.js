@@ -11,12 +11,13 @@ const PROMPT = require('readline-sync');
 
 let policyNumber, numAtFaultAccidents;
 let nameLast, nameFirst;
-let customerBirthdate, premiumDueDate;
+let customerBirthYear, premiumDueDate;
 const	BASE_PRICE = 100,
 	PRICE_TWIXT_15_30 = 20,
 	PRICE_TWIXT_30_45 = 10,
 	PRICE_GT_60 = 30,
-	PRICE_PER_ACCIDENT = 50;
+	PRICE_PER_ACCIDENT = 50,
+	CURRENT_YEAR = 2016;
 
 function main() {
 }
@@ -31,8 +32,19 @@ function setNumAtFaultAccidents() {
 	numAtFaultAccidents = PROMPT.question(`\nPlease enter the number of at-fault accidents in the last three years: `);
 }
 
+function validateNumBetween(min, num, max) {
+	if (min <= num && num <= max) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
 function setNameFirst() {
+	nameFirst = PROMPT.question(`\nPlease enter your first name: `);
 }
 
 function setNameLast() {
+	nameLast = PROMPT.question(`\nPlease enter your last name: `);
 }
