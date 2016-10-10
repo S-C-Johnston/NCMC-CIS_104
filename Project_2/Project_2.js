@@ -17,3 +17,22 @@ const	BASE_PRICE = 100,
 	PRICE_TWIXT_30_45 = 10,
 	PRICE_GT_60 = 30,
 	PRICE_PER_ACCIDENT = 50;
+
+function main() {
+}
+
+main();
+
+function setPolicyNumber() {
+	policyNumber = PROMPT.question(`\nPlease type your policy number: `);
+}
+
+function setNumAtFaultAccidents() {
+	numAtFaultAccidents = PROMPT.question(`\nPlease enter the number of at-fault accidents in the last three years: `);
+}
+
+function setNameFirst() {
+}
+
+function setNameLast() {
+}
