@@ -22,11 +22,13 @@ const	BASE_PRICE = 100,
 	PRICE_SENIOR = 30,
 	SENIOR_MIN = 60,
 	PRICE_PER_ACCIDENT = 50,
+	MONTH_MIN = 1,
+	MONTH_MAX = 12,
 	CURRENT_YEAR = 2016,
 	MAX_VALID_BIRTH_YEAR = (CURRENT_YEAR - 115), //Earliest year in which this program assumes a person could have been born and still be driving
 	MIN_VALID_BIRTH_YEAR = (CURRENT_YEAR - 16); //Most recent year in which this program assumes a person could have been born and now driving
 
-const	MESSAGE_INVALID_NUMBER = 'The input you entered was not a valid number, please try again.';
+const	MESSAGE_INVALID_NUMBER = 'The input you entered was not a valid number, please try again.',
 	MESSAGE_YEAR_OOB = 'The year you entered was outside of valid bounds, please try again.';
 
 function main() {
@@ -83,10 +85,20 @@ function setCustomerBirthYear() {
 }
 
 function setAndValidateMonth() { //Helper for setPremiumDueDate
+	month = Number(PROMPT.question(`\nEnter month, numeric: `));
+	if (Number.isNaN(month)) {
+		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
+		return setAndValidateMonth();
+	}
+	else if (false === validateNumBetween(MONTH_MIN, month, MONTH_MAX)) {
+		console.log(`\nThe month you entered was out of valid bounds, please try again.`);
+		return setAndValidateMonth();
+	}
+	return month;
 }
 
 function setAndValidateDay(month, year) { //Helper for setPremiumDueDate
-	
+
 }
 
 function setAndValidateYear() { //Helper for setPremiumDueDate
