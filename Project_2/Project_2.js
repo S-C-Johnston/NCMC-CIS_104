@@ -165,4 +165,9 @@ function setAndValidateYear() { //Helper for setPremiumDueDate
 }
 
 function setPremiumDueDate() {
+	let year = setAndValidateYear();
+	let month = setAndValidateMonth();
+	let day = setAndValidateDay(year, month);
+
+	premiumDueDate = `${year}-${month}-${day}`;
 }
