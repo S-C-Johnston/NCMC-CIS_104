@@ -97,8 +97,58 @@ function setAndValidateMonth() { //Helper for setPremiumDueDate
 	return month;
 }
 
-function setAndValidateDay(month, year) { //Helper for setPremiumDueDate
+function setAndValidateDay(year, month) { //Helper for setPremiumDueDate
+	let MESSAGE_INVALID_DAY = 'The day you entered was not valid for the month';
+	let MESSAGE_TRY_AGAIN = 'Please try again.';
 
+	let isLeapYear;
+	if (0 !== (year % 4)) {
+		isLeapYear = false;
+	}
+	else if (0 !== (year % 100)) {
+		isLeapYear = true;
+	}
+	else if (0 !== (year % 400)) {
+		isLeapYear = false;
+	}
+	else {
+		isLeapYear = true;
+	}
+
+	let day = Number(PROMPT.question(`\nEnter day, numeric: `));
+	if (Number.isNaN(day)) {
+		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
+		return setAndValidateDay(year, month);
+	}
+
+	if ([1,3,5,7,8,10,12].indexOf(month) > -1) { //stackoverflow.com/questions/4728144/
+		if (false === validateNumBetween(1, day, 31)) {
+			console.log(`\n${MESSAGE_INVALID_DAY} ${month}. ${MESSAGE_TRY_AGAIN}`);
+			return setAndValidateDay(year, month);
+		}
+	}
+	else if ([4,6,9,11].indexOf(month) > -1) {
+		if (false === validateNumBetween(1, day, 30)) {
+			console.log(`\n${MESSAGE_INVALID_DAY} ${month}. ${MESSAGE_TRY_AGAIN}`);
+			return setAndValidateDay(year, month);
+		}
+	}
+	else {
+		if (false === isLeapYear) {
+			if (false === validateNumBetween(1, day, 28)) {
+				console.log(`\n${MESSAGE_INVALID_DAY} ${month}. ${MESSAGE_TRY_AGAIN}`);
+				return setAndValidateDay(year, month);
+			}
+		}
+		else {
+			if (false === validateNumBetween(1, day, 29)) {
+				console.log(`\n${MESSAGE_INVALID_DAY} ${month}. ${MESSAGE_TRY_AGAIN}`);
+				return setAndValidateDay(year, month);
+			}
+		}
+	}
+
+	return day;
 }
 
 function setAndValidateYear() { //Helper for setPremiumDueDate
