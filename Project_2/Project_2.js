@@ -78,3 +78,15 @@ function setCustomerBirthYear() {
 		return setCustomerBirthYear();
 	}
 }
+
+function setAndValidateMonth() { //Helper for setPremiumDueDate
+}
+
+function setAndValidateDay(month) { //Helper for setPremiumDueDate
+}
+
+function setAndValidateYear() { //Helper for setPremiumDueDate
+}
+
+function setPremiumDueDate() {
+}
