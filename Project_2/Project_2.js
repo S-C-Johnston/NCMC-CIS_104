@@ -33,10 +33,18 @@ main();
 
 function setPolicyNumber() {
 	policyNumber = Number(PROMPT.question(`\nPlease type your policy number: `));
+	if (Number.isNaN(policyNumber)) {
+		console.log(`\nThe input you entered was not a valid number, please try again: `);
+		return setPolicyNumber();
+	}
 }
 
 function setNumAtFaultAccidents() {
 	numAtFaultAccidents = Number(PROMPT.question(`\nPlease enter the number of at-fault accidents in the last three years: `));
+	if (Number.isNaN(numAtFaultAccidents)) {
+		console.log(`\nThe input you entered was not a valid number, please try again: `);
+		return setNumAtFaultAccidents();
+	}
 }
 
 function validateNumBetween(min, num, max) {
@@ -58,6 +66,10 @@ function setNameLast() {
 
 function setCustomerBirthYear() {
 	customerBirthYear = Number(PROMPT.question(\nPlease enter the year you were born: ));
+	if (Number.isNaN(customerBirthYear)) {
+		console.log(`\nThe input you entered was not a valid number, please try again: `);
+		return setCustomerBirthYear();
+	}
 	if (true === validateNumBetween()) {
 		
 	}
