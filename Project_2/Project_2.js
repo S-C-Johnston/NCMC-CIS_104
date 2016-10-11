@@ -26,6 +26,9 @@ const	BASE_PRICE = 100,
 	MAX_VALID_BIRTH_YEAR = (CURRENT_YEAR - 115), //Earliest year in which this program assumes a person could have been born and still be driving
 	MIN_VALID_BIRTH_YEAR = (CURRENT_YEAR - 16); //Most recent year in which this program assumes a person could have been born and now driving
 
+const	MESSAGE_INVALID_NUMBER = 'The input you entered was not a valid number, please try again.';
+	MESSAGE_YEAR_OOB = 'The year you entered was outside of valid bounds, please try again.';
+
 function main() {
 }
 
@@ -34,7 +37,7 @@ main();
 function setPolicyNumber() {
 	policyNumber = Number(PROMPT.question(`\nPlease type your policy number: `));
 	if (Number.isNaN(policyNumber)) {
-		console.log(`\nThe input you entered was not a valid number, please try again.`);
+		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setPolicyNumber();
 	}
 }
@@ -42,7 +45,7 @@ function setPolicyNumber() {
 function setNumAtFaultAccidents() {
 	numAtFaultAccidents = Number(PROMPT.question(`\nPlease enter the number of at-fault accidents in the last three years: `));
 	if (Number.isNaN(numAtFaultAccidents)) {
-		console.log(`\nThe input you entered was not a valid number, please try again.`);
+		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setNumAtFaultAccidents();
 	}
 }
@@ -67,14 +70,14 @@ function setNameLast() {
 function setCustomerBirthYear() {
 	customerBirthYear = Number(PROMPT.question(\nPlease enter the year you were born: ));
 	if (Number.isNaN(customerBirthYear)) {
-		console.log(`\nThe input you entered was not a valid number, please try again.`);
+		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setCustomerBirthYear();
 	}
 	if (true === validateNumBetween(MAX_VALID_BIRTH_YEAR, customerBirthYear, MIN_VALID_BIRTH_YEAR)) {
 		return customerBirthYear;
 	}
 	else {
-		console.log(`\nThe year you entered was outside of valid bounds, please try again.`);
+		console.log(`\n${MESSAGE_YEAR_OOB}`);
 		return setCustomerBirthYear();
 	}
 }
@@ -82,10 +85,21 @@ function setCustomerBirthYear() {
 function setAndValidateMonth() { //Helper for setPremiumDueDate
 }
 
-function setAndValidateDay(month) { //Helper for setPremiumDueDate
+function setAndValidateDay(month, year) { //Helper for setPremiumDueDate
+	
 }
 
 function setAndValidateYear() { //Helper for setPremiumDueDate
+	year = Number(PROMPT.question(`\nEnter year, numeric: `));
+	if (Number.isNaN(year)) {
+		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
+		return setAndValidateYear();
+	}
+	else if (CURRENT_YEAR > year) {
+		console.log(`\n${MESSAGE_YEAR_OOB}`);
+		return setAndValidateYear();
+	}
+	return year;
 }
 
 function setPremiumDueDate() {
