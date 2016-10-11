@@ -13,11 +13,18 @@ let policyNumber, numAtFaultAccidents;
 let nameLast, nameFirst;
 let customerBirthYear, premiumDueDate;
 const	BASE_PRICE = 100,
-	PRICE_TWIXT_15_30 = 20,
-	PRICE_TWIXT_30_45 = 10,
-	PRICE_GT_60 = 30,
+	PRICE_YOUNG_ADULT = 20,
+	YOUNG_ADULT_MIN = 15,
+	YOUNG_ADULT_MAX = 29,
+	PRICE_ADULT = 10,
+	ADULT_MIN = 30,
+	ADULT_MAX = 45,
+	PRICE_SENIOR = 30,
+	SENIOR_MIN = 60,
 	PRICE_PER_ACCIDENT = 50,
-	CURRENT_YEAR = 2016;
+	CURRENT_YEAR = 2016,
+	MAX_VALID_BIRTH_YEAR = 1900,
+	MIN_VALID_BIRTH_YEAR = (CURRENT_YEAR - 15);
 
 function main() {
 }
@@ -25,11 +32,11 @@ function main() {
 main();
 
 function setPolicyNumber() {
-	policyNumber = PROMPT.question(`\nPlease type your policy number: `);
+	policyNumber = Number(PROMPT.question(`\nPlease type your policy number: `));
 }
 
 function setNumAtFaultAccidents() {
-	numAtFaultAccidents = PROMPT.question(`\nPlease enter the number of at-fault accidents in the last three years: `);
+	numAtFaultAccidents = Number(PROMPT.question(`\nPlease enter the number of at-fault accidents in the last three years: `));
 }
 
 function validateNumBetween(min, num, max) {
@@ -47,4 +54,11 @@ function setNameFirst() {
 
 function setNameLast() {
 	nameLast = PROMPT.question(`\nPlease enter your last name: `);
+}
+
+function setCustomerBirthYear() {
+	customerBirthYear = Number(PROMPT.question(\nPlease enter the year you were born: ));
+	if (true === validateNumBetween()) {
+		
+	}
 }
