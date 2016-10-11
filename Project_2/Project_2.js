@@ -9,9 +9,10 @@
 "use strict";
 const PROMPT = require('readline-sync');
 
-let policyNumber, numAtFaultAccidents;
+let policyNumber, numAtFaultAccidents, monthlyInsPremium;
 let nameLast, nameFirst;
 let customerBirthYear, premiumDueDate;
+
 const	BASE_PRICE = 100,
 	PRICE_YOUNG_ADULT = 20,
 	YOUNG_ADULT_MIN = 16,
@@ -32,9 +33,53 @@ const	MESSAGE_INVALID_NUMBER = 'The input you entered was not a valid number, pl
 	MESSAGE_YEAR_OOB = 'The year you entered was outside of valid bounds, please try again.';
 
 function main() {
+	printGreeting();
+	(function mainLoop(doContinue){
+		if (undefined === doContinue) {
+			doContinue = true;
+		}
+
+		if (false === doContinue) {
+			return;
+		}
+
+		setPolicyNumber();
+		setPremiumDueDate();
+		setNameLast();
+		setNameFirst();
+		setCustomerBirthYear();
+		setNumAtFaultAccidents();
+		calcMonthlyInsPremium();
+		doContinue = setDoContinue();
+		return mainLoop(doContinue);
+	})();
+	printGoodbye();
 }
 
 main();
+
+function setDoContinue() {
+	let boolContinue = Boolean(PROMPT.question(`Do you want to continue? 0 = no, non-zero = yes`));
+	return boolContinue;
+}
+
+function printGreeting() {
+	console.log(`\nWelcome to the Drive-Rite Insurance Premium tool.`);
+}
+
+function printGoodbye() {
+	console.log(`\nThank you for using the Drive-Rite Insurance Premium tool!`);
+}
+
+function printMonthlyInsPremium() {
+	console.log(`\n\nWith the details provided, the invoice details are as follows:`);
+	console.log(`\nMonthly Insurance Premium:\t\$${monthlyInsPremium}`);
+	console.log(`\nPolicy number:\t${policyNumber}`);
+	console.log(`Premium due date:\t${premiumDueDate}`);
+	console.log(`\nCustomer name:\t${nameFirst} ${nameLast}`);
+	console.log(`\nCustomer birth year:\t${customerBirthYear}`);
+	console.log(`\nNumber of at-fault accidents in the last three years:\t${numAtFaultAccidents}`);
+}
 
 function setPolicyNumber() {
 	policyNumber = Number(PROMPT.question(`\nPlease type your policy number: `));
@@ -170,4 +215,22 @@ function setPremiumDueDate() {
 	let day = setAndValidateDay(year, month);
 
 	premiumDueDate = `${year}-${month}-${day}`;
+}
+
+function calcMonthlyInsPremium() {
+	monthlyInsPremium = BASE_PRICE;
+
+	let customerAge = (CURRENT_YEAR - customerBirthYear);
+
+	if (true === validateNumBetween(YOUNG_ADULT_MIN, customerAge, YOUNG_ADULT_MAX)) {
+		monthlyInsPremium += PRICE_YOUNG_ADULT;
+	}
+	else if (true === validateNumBetween(ADULT_MIN, customerAge, ADULT_MAX)) {
+		monthlyInsPremium += PRICE_ADULT;
+	}
+	else if (SENIOR_MIN <= customerAge) {
+		monthlyInsPremium += PRICE_SENIOR;
+	}
+
+	monthlyInsPremium += (numAtFaultAccidents * PRICE_PER_ACCIDENT);
 }
