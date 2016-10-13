@@ -1,9 +1,10 @@
 #!/usr/bin/env node
+// jshint esversion: 6
 /**
- *	@author: Stewart Johnston <johnstons1@student.ncmich.edu>
- *	@Summary: Drive-rite insurance agnecy premium calculator | Created 2016-10-10
- *	@version: 2016.10.10.01
- *	@todo: 
+ * @author: Stewart Johnston <johnstons1@student.ncmich.edu>
+ * @Summary: Drive-rite insurance agnecy premium calculator | Created 2016-10-10
+ * @version: 2016.10.10.01
+ * @todo:
  */ 
 
 "use strict";
@@ -115,7 +116,7 @@ function setNameLast() {
 }
 
 function setCustomerBirthYear() {
-	customerBirthYear = Number(PROMPT.question(\nPlease enter the year you were born: ));
+	customerBirthYear = Number(PROMPT.question(`\nPlease enter the year you were born: `));
 	if (Number.isNaN(customerBirthYear)) {
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setCustomerBirthYear();
@@ -130,7 +131,7 @@ function setCustomerBirthYear() {
 }
 
 function setAndValidateMonth() { //Helper for setPremiumDueDate
-	month = Number(PROMPT.question(`\nEnter month, numeric: `));
+	let month = Number(PROMPT.question(`\nEnter month, numeric: `));
 	if (Number.isNaN(month)) {
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setAndValidateMonth();
@@ -197,7 +198,7 @@ function setAndValidateDay(year, month) { //Helper for setPremiumDueDate
 }
 
 function setAndValidateYear() { //Helper for setPremiumDueDate
-	year = Number(PROMPT.question(`\nEnter year, numeric: `));
+	let year = Number(PROMPT.question(`\nEnter year, numeric: `));
 	if (Number.isNaN(year)) {
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setAndValidateYear();
