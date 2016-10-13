@@ -3,7 +3,7 @@
 /**
  * @author: Stewart Johnston <johnstons1@student.ncmich.edu>
  * @Summary: Drive-rite insurance agnecy premium calculator | Created 2016-10-10
- * @version: 2016.10.10.01
+ * @version: 2016.10.10.02
  * @todo:
  */ 
 
@@ -60,7 +60,7 @@ function main() {
 main();
 
 function setDoContinue() {
-	let boolContinue = Boolean(PROMPT.question(`Do you want to continue? 0 = no, non-zero = yes`));
+	let boolContinue = Boolean(Number(PROMPT.question(`Do you want to continue? 0 = no, non-zero = yes`)));
 	return boolContinue;
 }
 
