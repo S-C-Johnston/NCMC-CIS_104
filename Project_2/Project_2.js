@@ -85,7 +85,7 @@ function printMonthlyInsPremium() {
 }
 
 function setPolicyNumber() {
-	policyNumber = Number(PROMPT.question(`\nPlease type your policy number: `));
+	policyNumber = Math.floor(Number(PROMPT.question(`\nPlease type your policy number: `)));
 	if (Number.isNaN(policyNumber)) {
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setPolicyNumber();
@@ -93,7 +93,7 @@ function setPolicyNumber() {
 }
 
 function setNumAtFaultAccidents() {
-	numAtFaultAccidents = Number(PROMPT.question(`\nPlease enter the number of at-fault accidents in the last three years: `));
+	numAtFaultAccidents = Math.floor(Number(PROMPT.question(`\nPlease enter the number of at-fault accidents in the last three years: `)));
 	if (Number.isNaN(numAtFaultAccidents)) {
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setNumAtFaultAccidents();
@@ -118,7 +118,7 @@ function setNameLast() {
 }
 
 function setCustomerBirthYear() {
-	customerBirthYear = Number(PROMPT.question(`\nPlease enter the year you were born: `));
+	customerBirthYear = Math.floor(Number(PROMPT.question(`\nPlease enter the year you were born: `)));
 	if (Number.isNaN(customerBirthYear)) {
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setCustomerBirthYear();
@@ -133,7 +133,7 @@ function setCustomerBirthYear() {
 }
 
 function setAndValidateMonth() { //Helper for setPremiumDueDate
-	let month = Number(PROMPT.question(`\nEnter month, numeric: `));
+	let month = Math.floor(Number(PROMPT.question(`\nEnter month, numeric: `)));
 	if (Number.isNaN(month)) {
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setAndValidateMonth();
@@ -163,7 +163,7 @@ function setAndValidateDay(year, month) { //Helper for setPremiumDueDate
 		isLeapYear = true;
 	}
 
-	let day = Number(PROMPT.question(`\nEnter day, numeric: `));
+	let day = Math.floor(Number(PROMPT.question(`\nEnter day, numeric: `)));
 	if (Number.isNaN(day)) {
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setAndValidateDay(year, month);
@@ -200,7 +200,7 @@ function setAndValidateDay(year, month) { //Helper for setPremiumDueDate
 }
 
 function setAndValidateYear() { //Helper for setPremiumDueDate
-	let year = Number(PROMPT.question(`\nEnter year, numeric: `));
+	let year = Math.floor(Number(PROMPT.question(`\nEnter year, numeric: `)));
 	if (Number.isNaN(year)) {
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setAndValidateYear();
