@@ -51,6 +51,7 @@ function main() {
 		setCustomerBirthYear();
 		setNumAtFaultAccidents();
 		calcMonthlyInsPremium();
+		printMonthlyInsPremium();
 		doContinue = setDoContinue();
 		return mainLoop(doContinue);
 	})();
@@ -60,7 +61,8 @@ function main() {
 main();
 
 function setDoContinue() {
-	let boolContinue = Boolean(Number(PROMPT.question(`Do you want to continue? 0 = no, non-zero = yes`)));
+	let userAnswer = PROMPT.question(`\nDo you want to continue? 0 = no, non-zero = yes : `);
+	let boolContinue = ((0 == userAnswer) ? Boolean(Number(userAnswer)) : Boolean(userAnswer)); //jshint ignore:line
 	return boolContinue;
 }
 
@@ -74,12 +76,12 @@ function printGoodbye() {
 
 function printMonthlyInsPremium() {
 	console.log(`\n\nWith the details provided, the invoice details are as follows:`);
-	console.log(`\nMonthly Insurance Premium:\t\$${monthlyInsPremium}`);
-	console.log(`\nPolicy number:\t${policyNumber}`);
-	console.log(`Premium due date:\t${premiumDueDate}`);
-	console.log(`\nCustomer name:\t${nameFirst} ${nameLast}`);
-	console.log(`\nCustomer birth year:\t${customerBirthYear}`);
-	console.log(`\nNumber of at-fault accidents in the last three years:\t${numAtFaultAccidents}`);
+	console.log(`\nMonthly Insurance Premium: \$${monthlyInsPremium}`);
+	console.log(`\nPolicy number: ${policyNumber}`);
+	console.log(`\nPremium due date: ${premiumDueDate}`);
+	console.log(`\nCustomer name: ${nameFirst} ${nameLast}`);
+	console.log(`\nCustomer birth year: ${customerBirthYear}`);
+	console.log(`\nNumber of at-fault accidents in the last three years: ${numAtFaultAccidents}`);
 }
 
 function setPolicyNumber() {
@@ -203,7 +205,7 @@ function setAndValidateYear() { //Helper for setPremiumDueDate
 		console.log(`\n${MESSAGE_INVALID_NUMBER}`);
 		return setAndValidateYear();
 	}
-	else if (CURRENT_YEAR > year) {
+	else if (false === validateNumBetween(CURRENT_YEAR, year, (CURRENT_YEAR + 1))) {
 		console.log(`\n${MESSAGE_YEAR_OOB}`);
 		return setAndValidateYear();
 	}
@@ -211,6 +213,7 @@ function setAndValidateYear() { //Helper for setPremiumDueDate
 }
 
 function setPremiumDueDate() {
+	console.log(`\nThe next three questions are to set the premium due date.`);
 	let year = setAndValidateYear();
 	let month = setAndValidateMonth();
 	let day = setAndValidateDay(year, month);
