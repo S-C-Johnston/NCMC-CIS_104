@@ -3,7 +3,7 @@
 /**
  * @author: Stewart Johnston <johnstons1@student.ncmich.edu>
  * @Summary: Drive-rite insurance agnecy premium calculator | Created 2016-10-10
- * @version: 2016.10.10.02
+ * @version: 1.0 | 1.0 deemed feature complete
  * @todo:
  */ 
 
