@@ -10,12 +10,19 @@ const PROMPT = require('readline-sync');
 
 const ACCOUNT_DEFAULT_INIT = 1000;
 
-let bDoContinue;
+const PRE_BAKED_USER_NAME = "Charlie Chaplin",
+PRE_BAKED_USER_NUM = 1111122213331444, // A card number
+PRE_BAKED_USER_PIN = 1234; // Obviously not a good example of security
+
+const RGX_ENG_NOUN_30 = /^[a-zA-Z0-9 ]{1,30}$/,
+      RGX_ENG_NOUN_60 = /^[a-zA-Z0-9 ]{1,60}$/;
 
 function main() {
+	printGreeting();
 	let userName;
 	let cardNumber;
-	printGreeting();
+	let bLoggedIn = false;
+	setUserDetails();
 	(function mainLoop(){
 
 	})();
@@ -32,12 +39,64 @@ function printGoodbye() {
 	console.log(`\nThanks for using the Simulatron ATM. Don't spend it all in one place, now.`);
 }
 
-function getUserDetails() {
-	const PRE_BAKED_USER_NAME = "Charlie Chaplin",
-	PRE_BAKED_USER_NUM = 1111122213331444,
-	PRE_BAKED_USER_PIN = 1234;
-	
+function setUserDetails() {
+	userName = setUserName();
+	cardNumber = setCardNum();
+	if (PRE_BAKED_USER_NAME !== userName
+	   || PRE_BAKED_USER_NUM !== (Number(cardNumber.replace(' ', ''))) {
+		console.log(`\nSorry, no user with that name and card could be found. Please try again.`);
+		userName = null;
+		cardNumber = null;
+		return setUserDetails();
+	}
+	bLoggedIn = true;
 }
 
-function getUserName() {
+function setUserName() {
+	let lUserName = (PROMPT.question(`\nPlease enter your whole name: `));
+
+	if (false === RGX_ENG_NOUN_60.test(lUserName) {
+		console.log(`\nThat is not a valid name or noun, please try again.`);
+		return setUserName();
+	}
+
+	return lUserName;
+}
+
+function setCardNum() {
+	let lCardNumber = (PROMPT.question(`\nPlease enter your card number: `));
+
+	if (false === (/^[0-9 ]{16,}$/.test(lCardNumber) )) {
+		console.log(`\nThat is not a valid card number, please try again.`);
+		return setCardNum();
+	}
+
+	return lCardNum;
+}
+
+function authCredentials(numTries) {
+	const MAX_TRIES = 3;
+	if (undefined === numTries) {
+		numTries = 0;
+	}
+
+	if (MAX_TRIES =< numTries) {
+		process.exit(); /* Crude, but theoretically functional
+				 * Program should be able to just clear out to main and loop from that scope
+				 */
+	}
+
+	let lUserPIN = Math.floor(Number(PROMPT.question(`\nPlease enter your PIN: `)));
+
+	if (Number.isNaN(lUserPIN)) {
+		console.log(`\nThat was not a valid numeric PIN format, please try again.`);
+		return authCredentials(numTries);
+	}
+
+	if (PRE_BAKED_USER_PIN !== (Number(lUserPIN))) {
+		let triesRemaining = (MAX_TRIES - numTries);
+		console.log(`\nThat PIN was not correct, you have ${triesRemaining} tries remaining.`);
+		numTries++;
+		return authCredentials(numTries);
+	}
 }
