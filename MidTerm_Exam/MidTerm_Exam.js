@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  *	@author: Stewart Johnston <johnstons1@student.ncmich.edu>
  *	@version: 2016.11.27.04
@@ -26,6 +27,23 @@ function main() {
 	let bLoggedIn = false;
 	setUserDetails();
 	(function mainLoop(){
+		if (false === bLoggedIn) { // Just in case. 
+			return;
+		}
+
+		console.log(`\n 0: Logout`); // Exit the program
+		console.log(`\n 1: Inquire to account status`);
+		console.log(`\n 2: Deposit`);
+		console.log(`\n 3: Withdraw`);
+		console.log(`\n 4: Transfer funds out`);
+		userChoice = PROMPT.question(`\nPlease make a choice, numeric: `);
+
+		if (Number.isNaN(userChoice)) {
+			console.log(`\nThat was not a valid numeric choice, please try again.`);
+			return mainLoop();
+		}
+
+		switch (userChoice)
 
 	})();
 	printGoodbye();
@@ -56,7 +74,7 @@ function setUserDetails() {
 }
 
 function setUserName() {
-	let lUserName = (PROMPT.question(`\nPlease enter your whole name: `));
+	let lUserName = PROMPT.question(`\nPlease enter your whole name: `);
 
 	if (false === RGX_ENG_NOUN_60.test(lUserName) {
 		console.log(`\nThat is not a valid name or noun, please try again.`);
@@ -67,7 +85,7 @@ function setUserName() {
 }
 
 function setCardNum() {
-	let lCardNumber = (PROMPT.question(`\nPlease enter your card number: `));
+	let lCardNumber = PROMPT.question(`\nPlease enter your card number: `);
 
 	if (false === (/^[0-9 ]{16,}$/.test(lCardNumber) )) {
 		console.log(`\nThat is not a valid card number, please try again.`);
