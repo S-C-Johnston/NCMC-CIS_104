@@ -26,8 +26,9 @@ function main() {
 	let cardNumber;
 	let bLoggedIn = false;
 	setUserDetails();
-	let userSavingsBalance = ACCOUNT_BALANCE_INIT; //Obviously not how this would be done properly
-	let userCheckingBalance = ACCOUNT_BALANCE_INIT;
+	let userSavingsBalance;
+	let userCheckingBalance;
+	initAccounts();
 	(function mainLoop(){
 		if (false === bLoggedIn) { // Just in case. 
 			return;
@@ -53,7 +54,9 @@ function main() {
 			process.exit();
 			break;
 		  case 1:
-			console.log(`\nSavings: ${userSavingsBalance} Checking: ${userCheckingBalance}`);
+			let savingsBal = getAccountBalance(savings01);
+			let checkingBal = getAccountBalance(checking01);
+			console.log(`\nSavings: ${savingsBal} Checking: ${checkingBal}`);
 			break;
 		}
 
@@ -62,6 +65,44 @@ function main() {
 }
 
 main();
+
+function modAccountBalance(accountType, amount) {
+	if (undefined === accountType || Number.isNaN(amount)) {
+		console.log(`\nInput was not valid. Something went wrong!`);
+		process.exit(); //For lack of the knowledge on how to properly handle exceptions
+	}
+
+	switch(accountType) {
+	  case savings01:
+		userSavingsBalance += amount;
+		break;
+	  case checking01:
+		userCheckingBalance += amount;
+		break;
+	  case default:
+		console.log(`\n${accountType} not recognized. Something went wrong!`);
+		break;
+	}
+}
+
+function initAccounts() {
+	userSavingsBalance = ACCOUNT_BALANCE_INIT; //Obviously not how this would be done properly
+	userCheckingBalance = ACCOUNT_BALANCE_INIT;
+}
+
+function getAccountBalance(accountType) {
+	switch(accountType) {
+	  case savings01:
+		return userSavingsBalance;
+		break;
+	  case checking01:
+		return userCheckingBalance;
+		break;
+	  case default:
+		return (userSavingsBalance, userCheckingBalance);
+		break;
+	}
+}
 
 function printGreeting() {
 	console.log(`\nWelcome to the Simulatron ATM, for all your simulated banking needs`);
