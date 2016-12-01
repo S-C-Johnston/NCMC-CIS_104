@@ -11,7 +11,7 @@
 "use strict";
 const PROMPT = require('readline-sync');
 
-const ACCOUNT_DEFAULT_INIT = 1000;
+const ACCOUNT_BALANCE_INIT = 1000;
 
 const PRE_BAKED_USER_NAME = "Charlie Chaplin",
 PRE_BAKED_USER_NUM = 1111122213331444, // A card number
@@ -26,6 +26,8 @@ function main() {
 	let cardNumber;
 	let bLoggedIn = false;
 	setUserDetails();
+	let userSavingsBalance = ACCOUNT_BALANCE_INIT; //Obviously not how this would be done properly
+	let userCheckingBalance = ACCOUNT_BALANCE_INIT;
 	(function mainLoop(){
 		if (false === bLoggedIn) { // Just in case. 
 			return;
@@ -49,6 +51,9 @@ function main() {
 		  case 0:
 			console.log(`\nYou have chosen to logout by choosing something equivalent to zero. If you believe this is in error, please contact Simulatron customer support.`);
 			process.exit();
+			break;
+		  case 1:
+			console.log(`\nSavings: ${userSavingsBalance} Checking: ${userCheckingBalance}`);
 			break;
 		}
 
