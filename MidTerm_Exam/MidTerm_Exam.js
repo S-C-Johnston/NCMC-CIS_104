@@ -43,7 +43,14 @@ function main() {
 			return mainLoop();
 		}
 
-		switch (userChoice)
+		userChoice = Number(userChoice);
+
+		switch (userChoice) {
+		  case 0:
+			console.log(`\nYou have chosen to logout by choosing something equivalent to zero. If you believe this is in error, please contact Simulatron customer support.`);
+			process.exit();
+			break;
+		}
 
 	})();
 	printGoodbye();
