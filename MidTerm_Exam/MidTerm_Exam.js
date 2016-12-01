@@ -13,6 +13,8 @@ const ACCOUNT_DEFAULT_INIT = 1000;
 let bDoContinue;
 
 function main() {
+	let userName;
+	let cardNumber;
 	printGreeting();
 	(function mainLoop(){
 
@@ -28,4 +30,14 @@ function printGreeting() {
 
 function printGoodbye() {
 	console.log(`\nThanks for using the Simulatron ATM. Don't spend it all in one place, now.`);
+}
+
+function getUserDetails() {
+	const PRE_BAKED_USER_NAME = "Charlie Chaplin",
+	PRE_BAKED_USER_NUM = 1111122213331444,
+	PRE_BAKED_USER_PIN = 1234;
+	
+}
+
+function getUserName() {
 }
