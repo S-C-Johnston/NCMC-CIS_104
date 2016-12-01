@@ -49,7 +49,8 @@ function setUserDetails() {
 		cardNumber = null;
 		return setUserDetails();
 	}
-	bLoggedIn = true;
+
+	bLoggedIn = authCredentials();
 }
 
 function setUserName() {
@@ -99,4 +100,6 @@ function authCredentials(numTries) {
 		numTries++;
 		return authCredentials(numTries);
 	}
+	
+	return true;
 }
