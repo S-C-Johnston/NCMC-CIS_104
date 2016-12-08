@@ -34,37 +34,52 @@ function main() {
 			return;
 		}
 
-		console.log(`\n 0: Logout`); // Exit the program
-		console.log(`\n 1: Inquire to account status`);
-		console.log(`\n 2: Deposit`);
-		console.log(`\n 3: Withdraw`);
-		console.log(`\n 4: Transfer funds out`);
-		userChoice = PROMPT.question(`\nPlease make a choice, numeric: `);
+		printMainMenu();
+		let choiceHolder = getMainMenuChoice();
 
-		if (Number.isNaN(userChoice)) {
-			console.log(`\nThat was not a valid numeric choice, please try again.`);
-			return mainLoop();
-		}
+		let mainMenuChoice;
+		(false !== choiceHolder) ? mainMenuChoice = choiceHolder : return mainLoop();
 
-		userChoice = Number(userChoice);
-
-		switch (userChoice) {
-		  case 0:
-			console.log(`\nYou have chosen to logout by choosing something equivalent to zero. If you believe this is in error, please contact Simulatron customer support.`);
-			process.exit();
-			break;
-		  case 1:
-			let savingsBal = getAccountBalance(savings01);
-			let checkingBal = getAccountBalance(checking01);
-			console.log(`\nSavings: ${savingsBal} Checking: ${checkingBal}`);
-			break;
-		}
+		interpMainMenuChoice(mainMenuChoice);
 
 	})();
 	printGoodbye();
 }
 
 main();
+
+function printMainMenu() {
+	console.log(`\n 0: Logout`); // Exit the program
+	console.log(`\n 1: Inquire to account status`);
+	console.log(`\n 2: Deposit`);
+	console.log(`\n 3: Withdraw`);
+	console.log(`\n 4: Transfer funds out`);
+}
+
+function getMainMenuChoice() {
+	let lUserChoice = PROMPT.question(`\nPlease make a choice, numeric: `);
+
+	if (Number.isNaN(userChoice)) {
+		console.log(`\nThat was not a valid numeric choice, please try again.`);
+		return false;
+	}
+
+	return lUserChoice;
+}
+
+function interpMainMenuChoice(lUserChoice) {
+	switch (lUserChoice) {
+	  case 0:
+		console.log(`\nYou have chosen to logout by choosing something equivalent to zero. If you believe this is in error, please contact Simulatron customer support.`);
+		process.exit();
+		break;
+	  case 1:
+		let savingsBal = getAccountBalance(savings01);
+		let checkingBal = getAccountBalance(checking01);
+		console.log(`\nSavings: ${savingsBal} Checking: ${checkingBal}`);
+		break;
+	}
+}
 
 function modAccountBalance(accountType, amount) {
 	if (undefined === accountType || Number.isNaN(amount)) {
