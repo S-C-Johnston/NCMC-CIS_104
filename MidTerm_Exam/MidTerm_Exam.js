@@ -59,7 +59,7 @@ function printMainMenu() {
 function getMainMenuChoice() {
 	let lUserChoice = PROMPT.question(`\nPlease make a choice, numeric: `);
 
-	if (Number.isNaN(userChoice)) {
+	if (Number.isNaN(lUserChoice)) {
 		console.log(`\nThat was not a valid numeric choice, please try again.`);
 		return false;
 	}
@@ -78,7 +78,80 @@ function interpMainMenuChoice(lUserChoice) {
 		let checkingBal = getAccountBalance(checking01);
 		console.log(`\nSavings: ${savingsBal} Checking: ${checkingBal}`);
 		break;
+	  case 2:
+		console.log(`\nYou've chosen to deposit into an account.`);
+		opt2Deposit();
+		break;
+	  case 3:
+		console.log(`\nYou've chosen to withdraw from an account.`);
+		opt3Withdraw();
+		break;
 	}
+}
+
+function opt2Deposit() {
+	let lUserChoice = accountTypePrompt();
+
+	let depositSum = setTransactionAmount();
+
+	console.log(`\nNoting deposit of ${depositSum} and recording the change.`);
+	switch (lUserChoice) {
+	  case 1:
+		modAccountBalance(savings01, depositSum);
+		break;
+	  case 2:
+		modAccountBalance(Checking01, depositSum);
+		break;
+	}
+	console.log(`\nDeposit successful.`);
+}
+
+function opt3Withdraw() { //Pretending we're dispensing money in $10 increments
+	const WITHDRAW_INCREMENT = 10;
+	let lUserChoice = accountTypePrompt();
+
+	console.log(`\nPlease use exact multiples of ${WITHDRAW_INCREMENT}`);
+	let withdrawSum = (setTransactionAmount());
+	if (0 !== (withdrawSum % WITHDRAW_INCREMENT)) {
+		console.log(`\nThat was not a valid withdraw value for this machine, please try again.`);
+		return opt3Withdraw();
+	}
+	withdrawSum = (-withdrawSum);
+
+	console.log(`\nNoting withdraw sum of ${withdrawSum} and recording the change. Retrieve your bills below.`);
+
+	switch (lUserChoice) {
+	  case 1:
+		modAccountBalance(savings01, withdrawSum);
+		break;
+	  case 2:
+		modAccountBalance(Checking01, withdrawSum);
+		break;
+	}
+	console.log(`\nWithdraw successful. If there was any problem, please report it to Simulatron customer support.`);
+}
+
+function setTransactionAmount() {
+	let transactionAmount = PROMPT.question(`\nEnter transaction amount: $`);
+
+	if (Number.isNaN(transactionAmount)) {
+		console.log(`\nThat was not a valid dollar value, please try again.`);
+		return setTransactionAmount();
+	}
+
+	transactionAmount = Math.abs(transactionAmount);
+	return transactionAmount;
+}
+
+function accountTypePrompt() {
+	let lUserChoice = PROMPT.question(`\nWhich account? 1: Savings, 2: Checking`);
+
+	if (Number.isNaN(lUserChoice)) {
+		console.log(`\nThat was not a valid numeric choice, please try again.`);
+		return accountTypePrompt;
+	}
+
+	return lUserChoice;
 }
 
 function modAccountBalance(accountType, amount) {
