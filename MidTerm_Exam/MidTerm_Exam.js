@@ -86,13 +86,21 @@ function interpMainMenuChoice(lUserChoice) {
 		console.log(`\nYou've chosen to withdraw from an account.`);
 		opt3Withdraw();
 		break;
+	  case 4:
+		console.log(`\nYou've chosen to transfer between accounts.`);
+		opt4Transfer();
+		break;
+	  case default:
+		console.log(`\nSomething went terribly wrong! Aborting.`);
+		process.exit();
+		break;
 	}
 }
 
 function opt2Deposit() {
 	let lUserChoice = accountTypePrompt();
 
-	let depositSum = setTransactionAmount();
+	let depositSum = inputTransactionAmount();
 
 	console.log(`\nNoting deposit of ${depositSum} and recording the change.`);
 	switch (lUserChoice) {
@@ -111,7 +119,7 @@ function opt3Withdraw() { //Pretending we're dispensing money in $10 increments
 	let lUserChoice = accountTypePrompt();
 
 	console.log(`\nPlease use exact multiples of ${WITHDRAW_INCREMENT}`);
-	let withdrawSum = (setTransactionAmount());
+	let withdrawSum = (inputTransactionAmount());
 	if (0 !== (withdrawSum % WITHDRAW_INCREMENT)) {
 		console.log(`\nThat was not a valid withdraw value for this machine, please try again.`);
 		return opt3Withdraw();
@@ -131,12 +139,28 @@ function opt3Withdraw() { //Pretending we're dispensing money in $10 increments
 	console.log(`\nWithdraw successful. If there was any problem, please report it to Simulatron customer support.`);
 }
 
-function setTransactionAmount() {
+function opt4Transfer() {
+	let fromAccount = accountTypePrompt();
+	let toAccount;
+	while (undefined === toAccount) {
+		let tempAccount = accountTypePrompt();
+		(fromAccount !== tempAccount) ? toAccount = tempAccount : console.log(`\nTo and from can't be the same! Please try again.`);
+	}
+	console.log(`\nYou've chosen to transfer from ${fromAccount} to ${toAccount}`);
+
+	let transferSum = inputTransactionAmount();
+	console.log(`\nTransfering ${transferSum} from ${fromAccount} to ${toAccount}`);
+	modAccountBalance(fromAccount, (-transferSum));
+	modAccountBalance(toAccount, transferSum);
+	console.log(`\nTransfer complete. Please check the account status to verify correct and expected results. If you believe something is in error, please contact Simulatron customer support.`);
+}
+
+function inputTransactionAmount() {
 	let transactionAmount = PROMPT.question(`\nEnter transaction amount: $`);
 
 	if (Number.isNaN(transactionAmount)) {
 		console.log(`\nThat was not a valid dollar value, please try again.`);
-		return setTransactionAmount();
+		return inputTransactionAmount();
 	}
 
 	transactionAmount = Math.abs(transactionAmount);
