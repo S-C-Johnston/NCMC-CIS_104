@@ -2,11 +2,9 @@
 // jshint esversion: 6
 /**
  *	@author: Stewart Johnston <johnstons1@student.ncmich.edu>
- *	@version: 2016.11.27.04
+ *	@version: 1.0 | Version 1.0 achieved 2016-12-12
  *	@summary: Midterm Exam, ATM simulator | Created 2016-11-27
- *	@todo: everything
- *	Really, though, for something like this you'd want to modify real values
- *	somewhere, not dummy values limited to the scope of the program.
+ *	@todo: 
  */
 
 "use strict";
