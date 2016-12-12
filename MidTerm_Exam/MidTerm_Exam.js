@@ -61,15 +61,15 @@ function printMainMenu() {
 	console.log(`\n 1: Inquire to account status`);
 	console.log(`\n 2: Deposit`);
 	console.log(`\n 3: Withdraw`);
-	console.log(`\n 4: Transfer funds out`);
+	console.log(`\n 4: Transfer funds between accounts`);
 }
 
 function getMainMenuChoice() {
 	let lUserChoice = PROMPT.question(`\nPlease make a choice, numeric: `);
 
-	if (Number.isNaN(lUserChoice)) {
-		console.log(`\nThat was not a valid numeric choice, please try again.`);
-		return false;
+	if (isNaN(lUserChoice)) {
+		console.log(`\nThat was not a numeric choice, please try again.`);
+		return getMainMenuChoice();
 	}
 
 	return lUserChoice;
@@ -99,9 +99,8 @@ function interpMainMenuChoice(lUserChoice) {
 		opt4Transfer();
 		break;
 	  default:
-		console.log(`\nSomething went terribly wrong! Aborting.`);
-		process.exit();
-		break;
+		console.log(`\n${lUserChoice} is not a valid choice. Please try again.`);
+		return false;
 	}
 }
 
@@ -111,14 +110,9 @@ function opt2Deposit() {
 	let depositSum = inputTransactionAmount();
 
 	console.log(`\nNoting deposit of ${depositSum} and recording the change.`);
-	switch (lUserChoice) {
-	  case 1:
-		modAccountBalance("savings01", depositSum);
-		break;
-	  case 2:
-		modAccountBalance("checking01", depositSum);
-		break;
-	}
+
+	modAccountBalance(lUserChoice, depositSum);
+
 	console.log(`\nDeposit successful.`);
 }
 
@@ -136,21 +130,17 @@ function opt3Withdraw() { //Pretending we're dispensing money in $10 increments
 
 	console.log(`\nNoting withdraw sum of ${withdrawSum} and recording the change. Retrieve your bills below.`);
 
-	switch (lUserChoice) {
-	  case 1:
-		modAccountBalance("savings01", withdrawSum);
-		break;
-	  case 2:
-		modAccountBalance("checking01", withdrawSum);
-		break;
-	}
+	modAccountBalance(lUserChoice, withdrawSum);
+
 	console.log(`\nWithdraw successful. If there was any problem, please report it to Simulatron customer support.`);
 }
 
 function opt4Transfer() {
+	console.log(`\nEnter the account from which you will transfer.`);
 	let fromAccount = accountTypePrompt();
 	let toAccount;
 	while (undefined === toAccount) {
+		console.log(`\nEnter the account to which you will transfer.`);
 		let tempAccount = accountTypePrompt();
 		if (fromAccount !== tempAccount) {
 			toAccount = tempAccount;
@@ -171,7 +161,7 @@ function opt4Transfer() {
 function inputTransactionAmount() {
 	let transactionAmount = PROMPT.question(`\nEnter transaction amount: $`);
 
-	if (Number.isNaN(transactionAmount)) {
+	if (isNaN(transactionAmount)) {
 		console.log(`\nThat was not a valid dollar value, please try again.`);
 		return inputTransactionAmount();
 	}
@@ -181,40 +171,38 @@ function inputTransactionAmount() {
 }
 
 function accountTypePrompt() {
-	let lUserChoice = PROMPT.question(`\nWhich account? 1: Savings, 2: Checking ?`);
+	let lUserChoice = PROMPT.question(`\nWhich account? 1: Savings, 2: Checking ? `);
 
-	if (Number.isNaN(lUserChoice)) {
+	if (isNaN(lUserChoice)) {
 		console.log(`\nThat was not a valid numeric choice, please try again.`);
-		return accountTypePrompt;
+		return accountTypePrompt();
 	}
 
-	/* switch(lUserChoice) {
-		case 1:
-			return "savings01";
-		case 2:
-			return "checking01";
-		default:
-			console.log(`Something went wrong! Aborting.`);
-			process.exit();
-	*/ }
-	
-	return lUserChoice;
+	switch(Number(lUserChoice)) {
+	  case 1:
+		return "savings01";
+	  case 2:
+		return "checking01";
+	  default:
+		console.log(`\n ${lUserChoice} is not a valid choice. Please try again.`);
+		return accountTypePrompt();
+	}
 }
 
 function modAccountBalance(accountType, amount) {
-	if (undefined === accountType || Number.isNaN(amount)) {
+	if (undefined === accountType || isNaN(amount)) {
 		console.log(`\nInput was not valid. Something went wrong!`);
 		process.exit(); //For lack of the knowledge on how to properly handle exceptions
 	}
 
 	switch(accountType) {
 	  case "savings01":
-		console.log(`\nUser savings balance is ${userSavingsBalance}`);
 		userSavingsBalance += amount;
+		console.log(`\nNew savings balance is ${userSavingsBalance}`);
 		break;
 	  case "checking01":
-		consoel.log(`\nUser checking balance is ${userCheckingBalance}`);
 		userCheckingBalance += amount;
+		console.log(`\nNew checking balance is ${userCheckingBalance}`);
 		break;
 	  default:
 		console.log(`\n${accountType} not recognized. Something went wrong!`);
@@ -297,7 +285,7 @@ function authCredentials(numTries) {
 
 	let lUserPIN = Math.floor(Number(PROMPT.question(`\nPlease enter your PIN: `)));
 
-	if (Number.isNaN(lUserPIN)) {
+	if (isNaN(lUserPIN)) {
 		console.log(`\nThat was not a valid numeric PIN format, please try again.`);
 		return authCredentials(numTries);
 	}
