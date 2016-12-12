@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// jshint esversion: 6
 /**
  *	@author: Stewart Johnston <johnstons1@student.ncmich.edu>
  *	@version: 2016.11.27.04
@@ -20,14 +21,15 @@ PRE_BAKED_USER_PIN = 1234; // Obviously not a good example of security
 const RGX_ENG_NOUN_30 = /^[a-zA-Z0-9 ]{1,30}$/,
       RGX_ENG_NOUN_60 = /^[a-zA-Z0-9 ]{1,60}$/;
 
+let userName;
+let cardNumber;
+let userSavingsBalance;
+let userCheckingBalance;
+
 function main() {
 	printGreeting();
-	let userName;
-	let cardNumber;
 	let bLoggedIn = false;
-	setUserDetails();
-	let userSavingsBalance;
-	let userCheckingBalance;
+	bLoggedIn = setUserDetails();
 	initAccounts();
 	(function mainLoop(){
 		if (false === bLoggedIn) { // Just in case. 
@@ -38,10 +40,16 @@ function main() {
 		let choiceHolder = getMainMenuChoice();
 
 		let mainMenuChoice;
-		(false !== choiceHolder) ? mainMenuChoice = choiceHolder : return mainLoop();
+		if (false !== choiceHolder) {
+			mainMenuChoice = Number(choiceHolder);
+		}
+		else {
+			return mainLoop();
+		}
 
 		interpMainMenuChoice(mainMenuChoice);
 
+		return mainLoop();
 	})();
 	printGoodbye();
 }
@@ -74,8 +82,8 @@ function interpMainMenuChoice(lUserChoice) {
 		process.exit();
 		break;
 	  case 1:
-		let savingsBal = getAccountBalance(savings01);
-		let checkingBal = getAccountBalance(checking01);
+		let savingsBal = getAccountBalance("savings01");
+		let checkingBal = getAccountBalance("checking01");
 		console.log(`\nSavings: ${savingsBal} Checking: ${checkingBal}`);
 		break;
 	  case 2:
@@ -90,7 +98,7 @@ function interpMainMenuChoice(lUserChoice) {
 		console.log(`\nYou've chosen to transfer between accounts.`);
 		opt4Transfer();
 		break;
-	  case default:
+	  default:
 		console.log(`\nSomething went terribly wrong! Aborting.`);
 		process.exit();
 		break;
@@ -105,10 +113,10 @@ function opt2Deposit() {
 	console.log(`\nNoting deposit of ${depositSum} and recording the change.`);
 	switch (lUserChoice) {
 	  case 1:
-		modAccountBalance(savings01, depositSum);
+		modAccountBalance("savings01", depositSum);
 		break;
 	  case 2:
-		modAccountBalance(Checking01, depositSum);
+		modAccountBalance("checking01", depositSum);
 		break;
 	}
 	console.log(`\nDeposit successful.`);
@@ -130,10 +138,10 @@ function opt3Withdraw() { //Pretending we're dispensing money in $10 increments
 
 	switch (lUserChoice) {
 	  case 1:
-		modAccountBalance(savings01, withdrawSum);
+		modAccountBalance("savings01", withdrawSum);
 		break;
 	  case 2:
-		modAccountBalance(Checking01, withdrawSum);
+		modAccountBalance("checking01", withdrawSum);
 		break;
 	}
 	console.log(`\nWithdraw successful. If there was any problem, please report it to Simulatron customer support.`);
@@ -144,7 +152,12 @@ function opt4Transfer() {
 	let toAccount;
 	while (undefined === toAccount) {
 		let tempAccount = accountTypePrompt();
-		(fromAccount !== tempAccount) ? toAccount = tempAccount : console.log(`\nTo and from can't be the same! Please try again.`);
+		if (fromAccount !== tempAccount) {
+			toAccount = tempAccount;
+		}
+		else {
+			console.log(`\nTo and from can't be the same! Please try again.`);
+		}
 	}
 	console.log(`\nYou've chosen to transfer from ${fromAccount} to ${toAccount}`);
 
@@ -168,13 +181,23 @@ function inputTransactionAmount() {
 }
 
 function accountTypePrompt() {
-	let lUserChoice = PROMPT.question(`\nWhich account? 1: Savings, 2: Checking`);
+	let lUserChoice = PROMPT.question(`\nWhich account? 1: Savings, 2: Checking ?`);
 
 	if (Number.isNaN(lUserChoice)) {
 		console.log(`\nThat was not a valid numeric choice, please try again.`);
 		return accountTypePrompt;
 	}
 
+	/* switch(lUserChoice) {
+		case 1:
+			return "savings01";
+		case 2:
+			return "checking01";
+		default:
+			console.log(`Something went wrong! Aborting.`);
+			process.exit();
+	*/ }
+	
 	return lUserChoice;
 }
 
@@ -185,13 +208,15 @@ function modAccountBalance(accountType, amount) {
 	}
 
 	switch(accountType) {
-	  case savings01:
+	  case "savings01":
+		console.log(`\nUser savings balance is ${userSavingsBalance}`);
 		userSavingsBalance += amount;
 		break;
-	  case checking01:
+	  case "checking01":
+		consoel.log(`\nUser checking balance is ${userCheckingBalance}`);
 		userCheckingBalance += amount;
 		break;
-	  case default:
+	  default:
 		console.log(`\n${accountType} not recognized. Something went wrong!`);
 		break;
 	}
@@ -204,15 +229,12 @@ function initAccounts() {
 
 function getAccountBalance(accountType) {
 	switch(accountType) {
-	  case savings01:
+	  case "savings01":
 		return userSavingsBalance;
-		break;
-	  case checking01:
+	  case "checking01":
 		return userCheckingBalance;
-		break;
-	  case default:
+	  default:
 		return (userSavingsBalance, userCheckingBalance);
-		break;
 	}
 }
 
@@ -227,21 +249,21 @@ function printGoodbye() {
 function setUserDetails() {
 	userName = setUserName();
 	cardNumber = setCardNum();
-	if (PRE_BAKED_USER_NAME !== userName
-	   || PRE_BAKED_USER_NUM !== (Number(cardNumber.replace(' ', ''))) {
+	if (PRE_BAKED_USER_NAME !== userName ||
+	PRE_BAKED_USER_NUM !== (Number(cardNumber.replace(' ', '')))) {
 		console.log(`\nSorry, no user with that name and card could be found. Please try again.`);
 		userName = null;
 		cardNumber = null;
 		return setUserDetails();
 	}
 
-	bLoggedIn = authCredentials();
+	return authCredentials();
 }
 
 function setUserName() {
 	let lUserName = PROMPT.question(`\nPlease enter your whole name: `);
 
-	if (false === RGX_ENG_NOUN_60.test(lUserName) {
+	if (false === RGX_ENG_NOUN_60.test(lUserName)) {
 		console.log(`\nThat is not a valid name or noun, please try again.`);
 		return setUserName();
 	}
@@ -257,7 +279,7 @@ function setCardNum() {
 		return setCardNum();
 	}
 
-	return lCardNum;
+	return lCardNumber;
 }
 
 function authCredentials(numTries) {
@@ -266,7 +288,8 @@ function authCredentials(numTries) {
 		numTries = 0;
 	}
 
-	if (MAX_TRIES =< numTries) {
+	if (MAX_TRIES <= numTries) {
+		console.log(`\nYou've exceeded the allowed number of tries! Aborting.`);
 		process.exit(); /* Crude, but theoretically functional
 				 * Program should be able to just clear out to main and loop from that scope
 				 */
@@ -280,9 +303,10 @@ function authCredentials(numTries) {
 	}
 
 	if (PRE_BAKED_USER_PIN !== (Number(lUserPIN))) {
+		numTries++;
 		let triesRemaining = (MAX_TRIES - numTries);
 		console.log(`\nThat PIN was not correct, you have ${triesRemaining} tries remaining.`);
-		numTries++;
+		//console.log(`\nCurrently at ${numTries} tries.`);
 		return authCredentials(numTries);
 	}
 	
