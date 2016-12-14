@@ -3,8 +3,8 @@
 /**
  * @author: Stewart Johnston <johnstons1@student.ncmich.edu>
  * @summary: Hollywood Movie Rating Guide rating program | Created 2016-12-13
- * @version: 1.0.1 | 1.0 deemed feature complete
- * @todo: 
+ * @version: 2016.12.13.01
+ * @todo: ARRAYS!
  */
 
 
@@ -12,11 +12,23 @@
 const PROMPT = require('readline-sync');
 
 const MIN_STARS = 0,
-      MAX_START = 5;
+      MAX_STARS = 5;
 const MAX_TRIES = 3;
 const CONTINUE_YES = 1,
       CONTINUE_NO = 0;
 let continueResponse;
+
+const IDX_TITLE = 0,
+      IDX_RATING_SUM = 1,
+      IDX_NUM_RATINGS = 2,
+      IDX_RATING_LOG = 3;
+let movies = [
+	["Hello Kitty 2: Electric Boogaloo"],
+	["Battles in SPAAACE VII: Edgy Jerk Progeny"],
+	["Doctor Peculiar Circumstances"],
+	["Legally Safe 4: Revenge of the DMCA"],
+	["Swiss-army-knife-man and the Filed Off Serial Numbers"],
+];
 
 function main() {
 	printGreeting();
