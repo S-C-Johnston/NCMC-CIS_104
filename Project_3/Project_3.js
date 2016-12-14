@@ -12,7 +12,7 @@
 const PROMPT = require('readline-sync');
 
 const MIN_STARS = 0,
-      MAX_START = 5;
+      MAX_STARS = 5;
 const MAX_TRIES = 3;
 const CONTINUE_YES = 1,
       CONTINUE_NO = 0;
