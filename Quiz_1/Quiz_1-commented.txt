@@ -1,0 +1,170 @@
+/**
+ *   @author Bates, Howard (hbates@northmen.org)
+ *   @version 0.0.2
+ *   @summary Project 4 demo code || created: 03.16.2016
+ *   @todo
+ */ //Comment header block, duh
+
+"use strict"; //Pragma that enforces the "strict" rule in the javascript engine
+const PROMPT = require('readline-sync'); //Pragma that imports a module using a const, "PROMPT", as a handle to its methods
+
+let continueResponse; //Variable (mutable) declaration
+let currentMonth, currentGrade, currentClassroom, upperTuition; //Same, but multiple on the same line
+const MAX_GRADE = 8, //Constant (immutable) declaration and initialization
+     MAX_MONTH = 9, //ditto, notice the "," at the end of the line
+     MAX_CLASSROOM = 3, // = is the assignment operator: initializes scalars to the right-hand value, attempts to change existing values if possible
+     KDG_TUITION = 80; //This one has a semicolon, ending the statement
+
+//Variables are mutable, can be reassigned at will
+//Constants are immutable, can't be changed after first initialization
+//These are scoped globally, so all methods below can see them
+//Lexically scoped values can only be seen from within their enclosing block
+//Lexically scoped values are declared with "let" and "const"
+//Prefer local over global
+
+function main() { //Function definition and open block
+     process.stdout.write('\x1Bc'); //Clears the screen
+     setContinueResponse(); //Function call w/ empty argument list
+     while (continueResponse === 1) { //While loop declaration and open block
+          setCurrentMonth();		//^ continuously executes while (condition) is true
+          setCurrentGrade();
+          setCurrentClassroom();
+          processPaymentCoupons();
+          setContinueResponse();
+          for (let i = 0; i < MAX_CLASSROOM; i++) { //C-style for loop declaration and open block and auto-incrementor
+//Here, i++ means that when the block finishes, i will be equal to i + 1
+// ([variable initialized to compare against]; [truthy comparison]; [iterator])
+               printGoodbye();
+          }
+     }
+}
+
+main(); //Main called from within global scope, actually runs the program
+//Main usually functions as a dispatch method, in that it primarily calls other
+//methods and communicates between them
+
+function setContinueResponse() { //Mutator method
+// Below is an if/else statement, executes first block if (condition) is true,
+// otherwise else block is used. This is also called selection logic. The
+// ability to change arbitrary pieces of information and make logical branching
+// choices defined a turing complete language
+     if (continueResponse != null) { //!= is a negated equality test, condition is true if operands are not equal
+          continueResponse = -1;
+          while (continueResponse !== 0 && continueResponse !== 1) {
+	       continueResponse = Number(PROMPT.question(`\nDo you want to
+continue? [0=no, 1=yes]: `)); //Number() typecasts the argument (PROMPT.etc) to
+//be a numeric value that javascript understands as such, instead of some
+//loosey-goosey dynamic value
+          }
+     } else { //Aforementioned else, denotes what will run if no preceeding conditions are true
+          continueResponse = 1;
+     }
+}
+
+function setCurrentMonth() {
+     if (currentMonth != null && currentMonth <= MAX_MONTH) { //&& is logical
+//AND, both operand conditions need to be true for the whole condition to be
+//true
+          currentMonth++; //Another auto-increment
+     } else {
+          currentMonth = 1;
+     }
+}
+
+function setCurrentGrade() {
+     if (typeof currentGrade !=='undefined' && currentGrade <= MAX_GRADE) {  //http://stackoverflow.com/questions/5076944/what-is-the-difference-between-null-and-undefined-in-javascript
+          currentGrade++;
+     } else {
+          currentGrade = 0;
+     }
+}
+
+function setCurrentClassroom() { //And example of tight cohesion, the logic in this method only really changes one thing
+//Something can be cohesive even if it appears to do many things, as long as it
+//has one clear end goal and no side-effects of changing other values, like
+//printing a menu and getting user input, all it's really doing as far as
+//changes go is the user input or a specific variable based on that input
+     if (typeof currentClassroom !=='undefined' && currentClassroom <= MAX_CLASSROOM) {
+          currentClassroom++;
+     } else {
+          currentClassroom = 1;
+     }
+}
+
+function setUpperTuition() { //Open curly brace opens a "block" which is an
+//extended set of statements and expressions that is executed whenever the open
+//brace is reached or its signature is called and its necessary conditions are
+//true.
+     const BASE_TUITION = 60;
+     upperTuition = BASE_TUITION * currentGrade;
+} //Closing curly brace closes such a block.
+
+function processPaymentCoupons() {
+     while (currentGrade <= MAX_GRADE) { // <= is a numeric comparison, less
+//than or equal to, condition is true if currentGrade is less than or equal to
+//MAX_GRADE.
+	  while (currentClassroom <= MAX_CLASSROOM) { //This is a good example
+//of using a constant to programatically handle a loop, instead of a "magic
+//number". Magic numbers are especially bad when you have many pieces of logic
+//that use the same number, so it is subject to human error, but constants
+//always have the same value
+               while (currentMonth <= MAX_MONTH) {
+                    if (currentGrade == 0) {
+                         console.log(`\n\tThe tuition for month: ${currentMonth}, for classroom: ${currentClassroom}, of grade: ${currentGrade} is: \$${KDG_TUITION}.`);
+                    } else {
+                         setUpperTuition();
+                         console.log(`\n\tThe tuition for month: ${currentMonth}, for classroom: ${currentClassroom}, of grade: ${currentGrade} is: \$${upperTuition}.`);
+                    }
+                    setCurrentMonth();
+               }
+               setCurrentClassroom();
+               setCurrentMonth();
+          }
+          setCurrentGrade();
+          setCurrentClassroom();
+     }
+}
+
+function printGoodbye() {
+     console.log(`\tGoodbye.`); //Printing to the screen in js, because it
+//wasn't designed for anything other than web-stuff
+} 
+
+///////////////Miscellany not found above
+
+//Concatination is the act of joining two things in sequence, as distinct from
+//overwriting a value with another. This is a procedure often performed on
+//arrays to add a value to the list of values.
+
+//String testing is distinct from numeric testing in a few ways. In a dynamic
+//language, you might be able to perform similar tests on both kinds of data,
+//like greater than or less than, but a string most often also had
+//regular-expression testing available. This has been used in CIS 104 to
+//demonstrate input validation and sanitization.
+//
+//A string is a sequence of characters. A character is some represenation
+//of some alphanumeric value: a letter or number or other human-language
+//glyph.
+//
+//In javascript, most strings look like "this", encapsulated by double [""] or
+//single [''] quotes.
+
+//Comments are for the humans reading the code, the interpreter or compiler
+//ignores them. Some documenting systems make use of comments for marking up
+//relevant text.
+//Single-line comments in javascript look like "//", like the beginning of this
+//line. Anything after a single-line comment is ignored in that line.
+//Multi-line comments in javascript start with "/*", with any amount of text
+//in-between, and end with "*/". They can also be used for inline commenting of
+//specific components with an end prior to other code, but only madmen do
+//that...
+
+//Arrays are lists of discrete values. In javascript they have this notation:
+//name = [arrayElement1, [arrayElement2, ... ], ... ] and so on. There is such
+//a creature as a multi-dimensional array, which is just an array of arrays (of
+//arrays, potentially).
+//One can access the values in an array by calling them by their index.
+//Javascript arrays start their indexes at 0 and go up in whole numbers.
+//array[0] returns the 0-th element, which is the first element that got
+//stored. They're lists that can be iterated over with numbers, and any element
+//in the list can be any valid value, like scalars, arrays, or objects
