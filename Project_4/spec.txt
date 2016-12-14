@@ -1,0 +1,6 @@
+Movie Kiosk: Re-factor your code [project 3] to run a kiosk at a movie theater. Program should loop infinitely to allow users to either see average rating of previous user entries, or enter their own review.
+
+Requirements:
+-	Should store movie title, current user ratings, total ratings, and number of ratings
+-	Should display a list of movies for user to review or option to review a new one
+-	Should allow user to select a movie to see average rating
