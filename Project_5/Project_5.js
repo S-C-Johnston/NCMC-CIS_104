@@ -41,7 +41,7 @@ function inputDoContinue() {
 }
 
 function inputMainMenu() {
-	let maxZoneOption = ZONE_PASSENGER_PRICES.length;
+	let maxZoneOption = (ZONE_PASSENGER_PRICES.length - 1);
 	console.log(`\nPlease enter the number of travel zones you intend to cross.`);
 	let lZonesCrossed = Math.floor(inputNumericInRange(0,maxZoneOption));
 	console.log(`\nYou've selected ${lZonesCrossed} travel zones to cross`);
@@ -78,7 +78,7 @@ function inputNumericInRange(minValue, maxValue, lInputTries) {
 	}
 
 	let lUserInput = Number(
-		PROMPT.question(`\nPlease enter a value between ${minValue} and ${maxValue}`));
+		PROMPT.question(`\nPlease enter a value between ${minValue} and ${maxValue}: `));
 
 	if ((true === isNaN(lUserInput)) ||
 	lUserInput < minValue ||
