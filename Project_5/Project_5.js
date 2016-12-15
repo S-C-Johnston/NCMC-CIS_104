@@ -25,6 +25,29 @@ function main() {
 
 main();
 
+function inputNumericInRange(minValue, maxValue, lInputTries) {
+	const MAX_INPUT_TRIES = 3;
+	lInputTries = (undefined !== lInputTries) ? lInputTries + 1 : 0 ;
+	if (MAX_INPUT_TRIES < lInputTries) {
+		console.log(`\nThere have been too many bad tries. Exiting.`);
+		process.exit();
+	}
+
+	let lUserInput = Number(
+		PROMPT.question(`\nPlease enter a value between ${minValue} and ${maxValue}`));
+
+	if ((true === isNaN(lUserInput)) ||
+	lUserInput < minValue ||
+	maxValue < lUserInput) {
+		console.log(`\nThe value you entered either wasn't a number or was outside of the accepted range. Please try again.`);
+		let lTriesRemaining = (MAX_INPUT_TRIES - lInputTries);
+		console.log(`\nYou have ${lTriesRemaining} tries remaining.`);
+		return inputNumericInRange(minValue, maxValue, lInputTries);
+	}
+
+	return lUserInput;
+}
+
 function printGreeting() {
 	console.log(`\nWelcome to the MidAmeric Bus Company ticket pricing terminal.`);
 }
