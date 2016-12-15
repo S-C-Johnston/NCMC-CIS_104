@@ -47,7 +47,11 @@ const ERROR_LOG = "Master_update_failures.log";
 function main() {
 	let master = tabulateInFileData(MASTER_RECORD);
 	createWeekStampedBackupFile(MASTER_RECORD, master);
+	master = sortTableByID(master);
 	let transactions = tabulateInFileData(TRANSACTION_RECORD);
+	transactions = sortTableByID(transactions);
+	updateMasterRecords(master,transactions);
+	appendTableToFileOnDisk(MASTER_RECORD,master);
 }
 
 main();
@@ -158,11 +162,13 @@ function printCoupons(clientData) {
 	let clientName = (`${clientData[MSTR_IDX_NAME_FIRST]} ${clientData[MSTR_IDX_NAME_LAST]}`);
 	let clientID = clientData[MSTR_IDX_IDNUM];
 	let lFileHandle = (`${clientID}_Coupon.txt`);
+	writeEmptyFile(lFileHandle);
 	IO.appendFileSync(`${lFileHandle}`, 
 `Congratulations ${clientName}, you've earned a coupon for one free haircut for
 your loyalty. Your ID is: ${clientID}, and anyone may use this coupon under
 your ID. Thank you for choosing Curl Up and Dye!`, 
 	`${TEXT_ENCODING}`);
+	console.log(`\nCoupon written to disk for client, please print coupons as appropriate.`);
 }
 
 function logUpdateFailure(recordIndex, recordData) {
