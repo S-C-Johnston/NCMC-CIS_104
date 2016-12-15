@@ -45,9 +45,18 @@ const TRNS_IDX_IDNUM = MSTR_IDX_IDNUM,
 const ERROR_LOG = "Master_update_failures.log";
 
 function main() {
+	let master = tabulateInFileData(MASTER_RECORD);
+	createWeekStampedBackupFile(MASTER_RECORD, master);
+	let transactions = tabulateInFileData(TRANSACTION_RECORD);
 }
 
 main();
+
+function createWeekStampedBackupFile(lFileHandle, lTableData) {
+	let weekStampedFileName = (`${WEEKEND_DATE}${lFileHandle}${BACKUP_EXT}`);
+	writeEmptyFile(weekStampedFileName);
+	appendTableToFileOnDisk(weekStampedFileName,lTableData);
+}
 
 function writeEmptyFile(lFileHandle) {
 	IO.writeFileSync(`${lFileHandle}`, "", `${TEXT_ENCODING}`);
@@ -161,5 +170,3 @@ function logUpdateFailure(recordIndex, recordData) {
 	`ERROR! Record # ${recordIndex} did not have a matching Master ID. The transaction record is: ${recordData}`,
 	`${TEXT_ENCODING}`);
 } //Write error file	
-
-//Allow updating transaction record
