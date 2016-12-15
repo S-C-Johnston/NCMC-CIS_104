@@ -23,7 +23,8 @@ const MSTR_IDX_IDNUM = 0,//ID
       MSTR_IDX_NAME_FIRST = 1,//First name
       MSTR_IDX_NAME_LAST = 2,//Last name
       MSTR_IDX_SUM_SPENT = 3,//Transaction sum to date
-      MSTR_IDX_COUPON_CT = 4;//Times coupon has been triggered
+      MSTR_IDX_COUPON_CT = 4,//Times coupon has been triggered
+      MSTR_IDX_COUPONS_USED = 5;
 const COUPON_INCREMENT = 750;
 
 const WEEKEND_DATE = (function() {
@@ -38,7 +39,8 @@ const TRANSACTION_RECORD = (`${WEEKEND_DATE}-Transactions.csv`);//(Weekly) Trans
 //Transaction record format indexes
 const TRNS_IDX_IDNUM = MSTR_IDX_IDNUM,
       TRNS_IDX_TRANSACTION_SUM = 1,
-      TRNS_IDX_MEMO = 2;
+      TRNS_IDX_MEMO = 2,
+      TRNS_IDX_COUPON = 3;
 
 function main() {
 }
@@ -129,12 +131,20 @@ function checkCouponStatus(lMasterRecord) {
 		lMasterRecord[MSTR_IDX_COUPON_CT] += newCoupons;
 
 		console.log(`\nClient is entitled to ${newCoupons} coupons!`);
-		printCoupons();
+		printCoupons(lMasterRecord);
 	}
 	return lMasterRecord;
 }//Each time $750 is exceeded, output a coupon for free haircut
 
-function printCoupons() {
+function printCoupons(clientData) {
+	let clientName = (`${clientData[MSTR_IDX_NAME_FIRST]} ${clientData[MSTR_IDX_NAME_LAST}`);
+	let clientID = clientData[MSTR_IDX_IDNUM];
+	let lFileHandle = (`${clientID}_Coupon.txt`);
+	IO.appendFileSync(`${lFileHandle}`, 
+`Congratulations ${clientName}, you've earned a coupon for one free haircut for
+your loyalty. Your ID is: ${clientID}, and anyone may use this coupon under
+your ID. Thank you for choosing Curl Up and Dye!`, 
+	`${TEXT_ENCODING}`);
 }
 
 function logUpdateFailure(recordIndex, recordData) {
