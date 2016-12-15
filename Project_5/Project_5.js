@@ -9,6 +9,8 @@
 
 "use strict";
 const PROMPT = require('readline-sync');
+const CONTINUE_YES = 1,
+      CONTINUE_NO = 0;
 
 const ZONE-PASSENGER_PRICES = [ //Rows are zones crossed, columns are passengers
 	[7.50, 14.00, 20.00, 25.00],
@@ -18,11 +20,25 @@ const ZONE-PASSENGER_PRICES = [ //Rows are zones crossed, columns are passengers
 ]; //I know it isn't REALLY constant, but it can't be overwritten, only added to
 
 function main() {
+	let doContinue = CONTINUE_YES;
 	printGreeting();
+	while (CONTINUE_YES === doContinue) {
+		userInput = inputMainMenu();
+		interpMMenuInput(userInput);
+		doContinue = inputDoContinue();
+	}
 	printGoodbye():
+	return main();
 }
 
 main();
+
+function inputDoContinue() {
+	console.log(`\nDo you want to continue? [${CONTINUE_YES} = yes], [${CONTINUE_NO} = no]`);
+	lUserInput = Math.floor(inputNumericInRange(CONTINUE_NO,CONTINUE_YES));
+
+	return lUserInput;
+}
 
 function inputMainMenu() {
 	let maxZoneOption = ZONE-PASSENGER_PRICES.length;
