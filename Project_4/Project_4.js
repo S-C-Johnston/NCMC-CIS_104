@@ -3,7 +3,7 @@
 /**
  * @author: Stewart Johnston <johnstons1@student.ncmich.edu>
  * @summary: Hollywood Movie Rating Guide rating program | Created 2016-12-13
- * @version: 1.0 | 1.0 Deemed feature complete 2016-12-13
+ * @version: 1.0.1 | 1.0 Deemed feature complete 2016-12-13
  * @todo:
  */
 
@@ -122,7 +122,7 @@ function printMainMenu() { //Returns maximum option number
 
 function inputMainMenuChoice(lMaxOption) { //Returns numeric value corrosponding to a title
 	console.log(`\nYou will have a choice of any of the above to rate.`);
-	let lUserChoice = inputNumericInRange(0, lMaxOption);
+	let lUserChoice = Math.floor(inputNumericInRange(0, lMaxOption));
 
 	return lUserChoice;
 }
