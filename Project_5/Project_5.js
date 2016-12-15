@@ -42,6 +42,17 @@ function inputMainMenu() {
 	return [lZonesCrossed, lPassengerCount];
 }
 
+function interpMMenuInput(zoneAndPassengerCount) {
+	let lZonesCrossed = shift(zoneAndPassengerCount),
+	    lPassengerCount = shift(zoneAndPassengerCount);
+
+	let lTicketPrice = ZONE-PASSENGER_PRICES[lZonesCrossed][lPassengerCount];
+
+	console.log(`\nThe price of the tickets for this trip is: $ ${lTicketPrice}`);
+
+	return lTicketPrice;
+}
+
 function inputNumericInRange(minValue, maxValue, lInputTries) {
 	const MAX_INPUT_TRIES = 3;
 	lInputTries = (undefined !== lInputTries) ? lInputTries + 1 : 0 ;
