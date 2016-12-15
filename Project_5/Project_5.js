@@ -10,12 +10,11 @@
 "use strict";
 const PROMPT = require('readline-sync');
 
-const ZONE-PASSENGER_PRICES = [
-	[], //This page intentionally left blank. Dumb, but offsets the array for UI purposes
-	[7.50, 10.00, 12.00, 12.75],
-	[14.00, 18.50, 22.00, 23.00],
-	[20.00, 21.00, 32.00, 33.00],
-	[25.00, 27.50, 36.00, 37.00],
+const ZONE-PASSENGER_PRICES = [ //Rows are zones crossed, columns are passengers
+	[7.50, 14.00, 20.00, 25.00],
+	[10.00, 18.50, 21.00, 27.50],
+	[12.00, 22.00, 32.00, 36.00],
+	[12.75, 23.00, 33.00, 37.00],
 ]; //I know it isn't REALLY constant, but it can't be overwritten, only added to
 
 function main() {
@@ -24,6 +23,24 @@ function main() {
 }
 
 main();
+
+function inputMainMenu() {
+	let maxZoneOption = ZONE-PASSENGER_PRICES.length;
+	console.log(`\nPlease enter the number of travel zones you intend to cross.`);
+	let lZonesCrossed = Math.floor(inputNumericInRange(0,maxZoneOption));
+	console.log(`\nYou've selected ${lZonesCrossed} travel zones to cross`);
+
+	let maxPassengerOption = ZONE-PASSENGER_PRICES[lZonesCrossed].length;
+	const REAL_NUM_MIN = 1;
+	console.log(`\nPlease enter the number of passengers travelling on this trip.`);
+	let lPassengerCount = Math.floor(
+		inputNumericInRange(REAL_NUM_MIN,maxPassengerOption));
+	console.log(`\nYou've selected ${lPassengerCount} passengers`);
+	lPassengerCount--;
+	// ^ Subtracting one to account for array 0 index offset
+
+	return [lZonesCrossed, lPassengerCount];
+}
 
 function inputNumericInRange(minValue, maxValue, lInputTries) {
 	const MAX_INPUT_TRIES = 3;
