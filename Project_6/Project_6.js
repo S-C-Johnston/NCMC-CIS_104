@@ -76,7 +76,7 @@ function updateMasterRecords(masterRecords, transactionRecords) {
 		let updateSuccess = false;
 		for (let masterRecord of masterRecords) {
 			let updatedRecord = 
-			updateIndividualMasterRecord(lMasterRecord,lTransRecord);	
+			updateIndividualMasterRecord(masterRecord,transRecord);	
 
 			if (updatedRecord !== masterRecord) {
 				masterRecord = updatedRecord;
@@ -85,7 +85,7 @@ function updateMasterRecords(masterRecords, transactionRecords) {
 
 			masterRecord = checkCouponStatus(masterRecord);
 		}
-		if (false === updateSucess) {
+		if (false === updateSuccess) {
 			let lFailedIndex = transactionRecords.indexOf(transRecord);
 			logUpdateFailure(lFailedIndex,transRecord);
 		}
@@ -109,7 +109,7 @@ function updateIndividualMasterRecord(lMasterRecord, lTransRecord) {
 function checkCouponStatus(lMasterRecord) {
 	let toCoupon = (lMasterRecord[MSTR_IDX_SUM_SPENT] -
 			(COUPON_INCREMENT *
-			 lMasterRecord[MSTR_IDX_COUPON_CT));
+			 lMasterRecord[MSTR_IDX_COUPON_CT]));
 	if (COUPON_INCREMENT <= toCoupon) {
 		let newCoupons = Math.floor(toCoupon / COUPON_INCREMENT);
 		lMasterRecord[MSTR_IDX_COUPON_CT] += newCoupons;
