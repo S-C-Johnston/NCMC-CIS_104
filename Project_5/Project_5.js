@@ -3,7 +3,7 @@
 /**
  * @author: Stewart Johnston <johnstons1@student.ncmich.edu>
  * @summary: MidArmeric Bus Company ticket price calculator | Created 2016-12-14
- * @version: 2016.12.14.01
+ * @version: 1.0 | 1.0 deemed feature complete as per the spec 2016-12-14
  * @todo:
  */
 
