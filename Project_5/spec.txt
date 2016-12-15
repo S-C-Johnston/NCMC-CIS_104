@@ -1,0 +1,15 @@
+The MidAmerica Bus Company charges fares to passengers based on the number of travel zones they cross. Additionally, discounts are provided for multiple passengers traveling together. Ticket fares are shown in table below:           
+
+	Zones Crossed
+
+Passengers	0	|1	|2	|3
+
+1		7.50	|10.00	|12.00	|12.75
+
+2		14.00	|18.50	|22.00	|23.00
+
+3		20.00	|21.00	|32.00	|33.00
+
+4		25.00	|27.50	|36.00	|37.00
+
+ Develop the logic for a program that accepts the number of passengers and zones crossed as input. The output is the ticket charge.
