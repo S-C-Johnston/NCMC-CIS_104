@@ -3,13 +3,14 @@
 /**
  * @author: Stewart Johnston <johnstons1@student.ncmich.edu>
  * @summary: Curl Up and Dye record-keeper | Created 2016-12-14
- * @version: 2016.12.14.05
+ * @version: 2016.12.14.06
  * @todo:
  */
 
 "use strict";
 const PROMPT = require('readline-sync');
 const IO = require('fs');
+const TEXT_ENCODING = 'utf8';
 
 const RGX_WIN_OR_NIX_NEWLINE = /\r?\n/,
       RGX_ENG_NOUN_30 = /^[a-zA-Z0-9]{1,30}$/,
@@ -44,8 +45,21 @@ function main() {
 
 main();
 
-function tabulateFileData(lFileHandle) {
-	let fileContents = IO.readFileSync(`${lFileHandle}`, 'utf8');
+function appendTableToFileOnDisk(lFileHandle, lTableData) {
+	for (let record of lTableData) {
+		const COLUMNS = record.length;
+		for (let i = 0; i < COLUMNS; i++) {
+			if (i < (COLUMNS - 1)) {
+				IO.appendFileSync(`${lFileHandle}`,
+				`${record[i]},`, `${TEXT_ENCODING}`);
+			}
+		}
+		IO.appendFileSync(`${lFileHandle}`, "\n", `${TEXT_ENCODING}`);
+	}
+}
+
+function tabulateInFileData(lFileHandle) {
+	let fileContents = IO.readFileSync(`${lFileHandle}`, `${TEXT_ENCODING}`);
 	let fileLines = fileContents.toString().split(RGX_WIN_OR_NIX_NEWLINE);
 	let dataRecords = [];
 	for (let item of fileLines) {
