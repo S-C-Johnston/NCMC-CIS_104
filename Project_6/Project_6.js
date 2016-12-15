@@ -75,17 +75,19 @@ function updateMasterRecords(masterRecords, transactionRecords) {
 	for (let transRecord of transactionRecords) {
 		let updateSuccess = false;
 		for (let masterRecord of masterRecords) {
-			if (masterRecord[MSTR_IDX_IDNUM] ===
-					transRecord[TRNS_IDX_IDNUM]) {
-				masterRecord[MSTR_IDX_SUM_SPENT] +=
-					transRecord[TRNS_IDX_TRANSACTION_SUM];
+			let updatedRecord = 
+			updateIndividualMasterRecord(lMasterRecord,lTransRecord);	
+
+			if (updatedRecord !== masterRecord) {
+				masterRecord = updatedRecord;
 				updateSuccess = true;
 			}
+
 			masterRecord = checkCouponStatus(masterRecord);
 		}
 		if (false === updateSucess) {
 			let lFailedIndex = transactionRecords.indexOf(transRecord);
-			updateFailureError(lFailedIndex,transRecord);
+			logUpdateFailure(lFailedIndex,transRecord);
 		}
 	}
 	return masterRecords;
@@ -94,6 +96,15 @@ function updateMasterRecords(masterRecords, transactionRecords) {
 //spent to date. 
 //Output: updated master record, error file when any transaction record doesn't
 //have a matching master record ID.
+
+function updateIndividualMasterRecord(lMasterRecord, lTransRecord) {
+	if (lMasterRecord[MSTR_IDX_IDNUM] ===
+			lTransRecord[TRNS_IDX_IDNUM]) {
+		lMasterRecord[MSTR_IDX_SUM_SPENT] +=
+			lTransRecord[TRNS_IDX_TRANSACTION_SUM];
+	}
+	return lMasterRecord;
+}
 
 function checkCouponStatus(lMasterRecord) {
 	let toCoupon = (lMasterRecord[MSTR_IDX_SUM_SPENT] -
@@ -112,7 +123,7 @@ function checkCouponStatus(lMasterRecord) {
 function printCoupons() {
 }
 
-function updateFailureError(recordIndex, recordData) {
+function logUpdateFailure(recordIndex, recordData) {
 } //Write error file	
 
 //Allow updating transaction record
