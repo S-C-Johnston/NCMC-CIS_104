@@ -11,14 +11,14 @@
 const PROMPT = require('readline-sync');
 const IO = require('fs');
 
-//Master record constant
-//Master record backup constant
+const MASTER_RECORD = "Master.csv",//Master record constant
+      BACKUP_EXT = ".bak";//Master record backup constant
 //Master record format indexes
-//ID
-//First name
-//Last name
-//Transaction sum to date
-//Times coupon has been triggered
+const MSTR_IDX_IDNUM = 0,//ID
+      MSTR_IDX_NAME_FIRST = 1,//First name
+      MSTR_IDX_NAME_LAST = 2,//Last name
+      MSTR_IDX_SUM_SPENT = 3,//Transaction sum to date
+      MSTR_IDX_COUPON_CT = 4;//Times coupon has been triggered
 
 //(Weekly) Transaction record constant
 //Transaction record format indexes
