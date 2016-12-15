@@ -40,7 +40,7 @@ const TRANSACTION_RECORD = (`${WEEKEND_DATE}-Transactions.csv`);//(Weekly) Trans
 const TRNS_IDX_IDNUM = MSTR_IDX_IDNUM,
       TRNS_IDX_TRANSACTION_SUM = 1,
       TRNS_IDX_MEMO = 2,
-      TRNS_IDX_COUPON = 3;
+      TRNS_IDX_COUPONS_USED = 3;
 
 function main() {
 }
@@ -115,9 +115,12 @@ function updateMasterRecords(masterRecords, transactionRecords) {
 
 function updateIndividualMasterRecord(lMasterRecord, lTransRecord) {
 	if (lMasterRecord[MSTR_IDX_IDNUM] ===
-			lTransRecord[TRNS_IDX_IDNUM]) {
+	    lTransRecord[TRNS_IDX_IDNUM]) {
 		lMasterRecord[MSTR_IDX_SUM_SPENT] +=
-			lTransRecord[TRNS_IDX_TRANSACTION_SUM];
+		lTransRecord[TRNS_IDX_TRANSACTION_SUM];
+
+		lMasterRecord[MSTR_IDX_COUPONS_USED] +=
+		lTransRecord[TRNS_IDX_COUPONS_USED];
 	}
 	return lMasterRecord;
 }
@@ -137,7 +140,7 @@ function checkCouponStatus(lMasterRecord) {
 }//Each time $750 is exceeded, output a coupon for free haircut
 
 function printCoupons(clientData) {
-	let clientName = (`${clientData[MSTR_IDX_NAME_FIRST]} ${clientData[MSTR_IDX_NAME_LAST}`);
+	let clientName = (`${clientData[MSTR_IDX_NAME_FIRST]} ${clientData[MSTR_IDX_NAME_LAST]}`);
 	let clientID = clientData[MSTR_IDX_IDNUM];
 	let lFileHandle = (`${clientID}_Coupon.txt`);
 	IO.appendFileSync(`${lFileHandle}`, 
