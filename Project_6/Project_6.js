@@ -42,6 +42,8 @@ const TRNS_IDX_IDNUM = MSTR_IDX_IDNUM,
       TRNS_IDX_MEMO = 2,
       TRNS_IDX_COUPONS_USED = 3;
 
+const ERROR_LOG = "Master_update_failures.log";
+
 function main() {
 }
 
@@ -155,6 +157,9 @@ your ID. Thank you for choosing Curl Up and Dye!`,
 }
 
 function logUpdateFailure(recordIndex, recordData) {
+	IO.appendFileSync(`${ERROR_LOG}`,
+	`ERROR! Record # ${recordIndex} did not have a matching Master ID. The transaction record is: ${recordData}`,
+	`${TEXT_ENCODING}`);
 } //Write error file	
 
 //Allow updating transaction record
