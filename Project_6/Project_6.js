@@ -23,6 +23,7 @@ const MSTR_IDX_IDNUM = 0,//ID
       MSTR_IDX_NAME_LAST = 2,//Last name
       MSTR_IDX_SUM_SPENT = 3,//Transaction sum to date
       MSTR_IDX_COUPON_CT = 4;//Times coupon has been triggered
+const COUPON_INCREMENT = 750;
 
 const WEEKEND_DATE = (function() {
 	let date = new Date();
@@ -59,7 +60,8 @@ function sortTableByID(workingTable) {
 		let tmp = workingTable[i];
 		let j = (i - 1);
 		while (j > 0 && 
-		workingTable[j][TRNS_IDX_IDNUM] > tmp[TRNS_IDX_IDNUM]) {
+		workingTable[j][TRNS_IDX_IDNUM] >
+		tmp[TRNS_IDX_IDNUM]) {
 			workingTable[(j + 1)] = workingTable[j];
 			j--;
 		}
@@ -69,12 +71,48 @@ function sortTableByID(workingTable) {
 	return workingTable;
 }//Sort record arrays by ID number
 
-//Match transaction record to master record, update cumulative total to
+function updateMasterRecords(masterRecords, transactionRecords) {
+	for (let transRecord of transactionRecords) {
+		let updateSuccess = false;
+		for (let masterRecord of masterRecords) {
+			if (masterRecord[MSTR_IDX_IDNUM] ===
+					transRecord[TRNS_IDX_IDNUM]) {
+				masterRecord[MSTR_IDX_SUM_SPENT] +=
+					transRecord[TRNS_IDX_TRANSACTION_SUM];
+				updateSuccess = true;
+			}
+			masterRecord = checkCouponStatus(masterRecord);
+		}
+		if (false === updateSucess) {
+			let lFailedIndex = transactionRecords.indexOf(transRecord);
+			updateFailureError(lFailedIndex,transRecord);
+		}
+	}
+	return masterRecords;
+}//Match transaction record to master record, update cumulative total to
 //master record. Add current week's spent (transaction record) to master record
 //spent to date. 
 //Output: updated master record, error file when any transaction record doesn't
 //have a matching master record ID.
-//
-//Each time $750 is exceeded, output a coupon for free haircut
+
+function checkCouponStatus(lMasterRecord) {
+	let toCoupon = (lMasterRecord[MSTR_IDX_SUM_SPENT] -
+			(COUPON_INCREMENT *
+			 lMasterRecord[MSTR_IDX_COUPON_CT));
+	if (COUPON_INCREMENT <= toCoupon) {
+		let newCoupons = Math.floor(toCoupon / COUPON_INCREMENT);
+		lMasterRecord[MSTR_IDX_COUPON_CT] += newCoupons;
+
+		console.log(`\nClient is entitled to ${newCoupons} coupons!`);
+		printCoupons();
+	}
+	return lMasterRecord;
+}//Each time $750 is exceeded, output a coupon for free haircut
+
+function printCoupons() {
+}
+
+function updateFailureError(recordIndex, recordData) {
+} //Write error file	
 
 //Allow updating transaction record
