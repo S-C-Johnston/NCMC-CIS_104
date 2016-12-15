@@ -12,7 +12,7 @@ const PROMPT = require('readline-sync');
 const CONTINUE_YES = 1,
       CONTINUE_NO = 0;
 
-const ZONE-PASSENGER_PRICES = [ //Rows are zones crossed, columns are passengers
+const ZONE_PASSENGER_PRICES = [ //Rows are zones crossed, columns are passengers
 	[7.50, 14.00, 20.00, 25.00],
 	[10.00, 18.50, 21.00, 27.50],
 	[12.00, 22.00, 32.00, 36.00],
@@ -23,11 +23,11 @@ function main() {
 	let doContinue = CONTINUE_YES;
 	printGreeting();
 	while (CONTINUE_YES === doContinue) {
-		userInput = inputMainMenu();
+		let userInput = inputMainMenu();
 		interpMMenuInput(userInput);
 		doContinue = inputDoContinue();
 	}
-	printGoodbye():
+	printGoodbye();
 	return main();
 }
 
@@ -35,18 +35,18 @@ main();
 
 function inputDoContinue() {
 	console.log(`\nDo you want to continue? [${CONTINUE_YES} = yes], [${CONTINUE_NO} = no]`);
-	lUserInput = Math.floor(inputNumericInRange(CONTINUE_NO,CONTINUE_YES));
+	let lUserInput = Math.floor(inputNumericInRange(CONTINUE_NO,CONTINUE_YES));
 
 	return lUserInput;
 }
 
 function inputMainMenu() {
-	let maxZoneOption = ZONE-PASSENGER_PRICES.length;
+	let maxZoneOption = ZONE_PASSENGER_PRICES.length;
 	console.log(`\nPlease enter the number of travel zones you intend to cross.`);
 	let lZonesCrossed = Math.floor(inputNumericInRange(0,maxZoneOption));
 	console.log(`\nYou've selected ${lZonesCrossed} travel zones to cross`);
 
-	let maxPassengerOption = ZONE-PASSENGER_PRICES[lZonesCrossed].length;
+	let maxPassengerOption = ZONE_PASSENGER_PRICES[lZonesCrossed].length;
 	const REAL_NUM_MIN = 1;
 	console.log(`\nPlease enter the number of passengers travelling on this trip.`);
 	let lPassengerCount = Math.floor(
@@ -59,10 +59,10 @@ function inputMainMenu() {
 }
 
 function interpMMenuInput(zoneAndPassengerCount) {
-	let lZonesCrossed = shift(zoneAndPassengerCount),
-	    lPassengerCount = shift(zoneAndPassengerCount);
+	let lZonesCrossed = zoneAndPassengerCount.shift(),
+	    lPassengerCount = zoneAndPassengerCount.shift();
 
-	let lTicketPrice = ZONE-PASSENGER_PRICES[lZonesCrossed][lPassengerCount];
+	let lTicketPrice = ZONE_PASSENGER_PRICES[lZonesCrossed][lPassengerCount];
 
 	console.log(`\nThe price of the tickets for this trip is: $ ${lTicketPrice}`);
 
