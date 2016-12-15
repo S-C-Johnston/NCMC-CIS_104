@@ -47,13 +47,27 @@ function tabulateFileData(lFileHandle) {
 	let fileContents = IO.readFileSync(`${lFileHandle}`, 'utf8');
 	let fileLines = fileContents.toString().split(RGX_WIN_OR_NIX_NEWLINE);
 	let dataRecords = [];
-	for (item of fileLines) {
+	for (let item of fileLines) {
 		dataRecords.push(item.toString().split(RGX_FIELD_SEPARATOR));
 	}
 	return dataRecords;
 }//Read file in and split into 2d array, return that array as a result
 
-//Sort record arrays by ID number
+function sortTableByID(workingTable) {
+	let setSize = workingTable.length;
+	for (let i = 1; i < setSize; i++) {
+		let tmp = workingTable[i];
+		let j = (i - 1);
+		while (j > 0 && 
+		workingTable[j][TRNS_IDX_IDNUM] > tmp[TRNS_IDX_IDNUM]) {
+			workingTable[(j + 1)] = workingTable[j];
+			j--;
+		}
+		workingTable[(j + 1)] = tmp;
+	}
+
+	return workingTable;
+}//Sort record arrays by ID number
 
 //Match transaction record to master record, update cumulative total to
 //master record. Add current week's spent (transaction record) to master record
