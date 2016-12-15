@@ -47,6 +47,10 @@ function main() {
 
 main();
 
+function writeEmptyFile(lFileHandle) {
+	IO.writeFileSync(`${lFileHandle}`, "", `${TEXT_ENCODING}`);
+}
+
 function appendTableToFileOnDisk(lFileHandle, lTableData) {
 	for (let record of lTableData) {
 		const COLUMNS = record.length;
