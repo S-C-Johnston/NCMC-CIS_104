@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+rm *Coupon.txt
+cp --force Master.csv.bak Master.csv
+rm 2016-12-17Master.csv.bak
+rm Master_update_failures.log

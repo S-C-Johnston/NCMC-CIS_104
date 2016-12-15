@@ -24,7 +24,8 @@ const MSTR_IDX_IDNUM = 0,//ID
       MSTR_IDX_NAME_LAST = 2,//Last name
       MSTR_IDX_SUM_SPENT = 3,//Transaction sum to date
       MSTR_IDX_COUPON_CT = 4,//Times coupon has been triggered
-      MSTR_IDX_COUPONS_USED = 5;
+      MSTR_IDX_COUPONS_USED = 5,
+      MSTR_IDX_B_UPDATED = 6;
 const COUPON_INCREMENT = 750;
 
 const WEEKEND_DATE = (function() {
@@ -51,6 +52,7 @@ function main() {
 	let transactions = tabulateInFileData(TRANSACTION_RECORD);
 	transactions = sortTableByID(transactions);
 	updateMasterRecords(master,transactions);
+	writeEmptyFile(MASTER_RECORD);
 	appendTableToFileOnDisk(MASTER_RECORD,master);
 }
 
@@ -67,12 +69,16 @@ function writeEmptyFile(lFileHandle) {
 }
 
 function appendTableToFileOnDisk(lFileHandle, lTableData) {
-	for (let record of lTableData) {
-		const COLUMNS = record.length;
-		for (let i = 0; i < COLUMNS; i++) {
-			if (i < (COLUMNS - 1)) {
+	for (let i = 0; i < lTableData.length; i++) {
+		const COLUMNS = lTableData[i].length;
+		for (let j = 0; j < COLUMNS; j++) {
+			if (j > 0) {
 				IO.appendFileSync(`${lFileHandle}`,
-				`${record[i]},`, `${TEXT_ENCODING}`);
+				`,${lTableData[i][j]}`, `${TEXT_ENCODING}`);
+			}
+			else {
+				IO.appendFileSync(`${lFileHandle}`,
+				`${lTableData[i][j]}`, `${TEXT_ENCODING}`);
 			}
 		}
 		IO.appendFileSync(`${lFileHandle}`, "\n", `${TEXT_ENCODING}`);
@@ -83,43 +89,67 @@ function tabulateInFileData(lFileHandle) {
 	let fileContents = IO.readFileSync(`${lFileHandle}`, `${TEXT_ENCODING}`);
 	let fileLines = fileContents.toString().split(RGX_WIN_OR_NIX_NEWLINE);
 	let dataRecords = [];
-	for (let item of fileLines) {
-		dataRecords.push(item.toString().split(RGX_FIELD_SEPARATOR));
+	for (let i = 0; i < fileLines.length; i++) {
+	//console.log(fileLines[i]);
+		dataRecords.push(fileLines[i].toString().split(RGX_FIELD_SEPARATOR));
 	}
+	//console.log(dataRecords);
+	dataRecords.pop();
+	// ^ For some inane reason, without this there is an extra dangling
+	// elemnt which is null and it screws up all the math. WTF.
+	//console.log(dataRecords);
+	dataRecords = numericizeTableRecords(dataRecords);
 	return dataRecords;
 }//Read file in and split into 2d array, return that array as a result
+
+function numericizeTableRecords(lWorkingTable) {
+	for (let record of lWorkingTable) {
+		for (let item of record) {
+			//let bNotANumber = isNaN(item);
+			//console.log(`bNotANumber: ${bNotANumber}, value: ${item}`);
+			item = (false === isNaN(item)) ? Number(item) : item ;
+		}
+	}
+	return lWorkingTable;
+}
 
 function sortTableByID(workingTable) {
 	let setSize = workingTable.length;
 	for (let i = 1; i < setSize; i++) {
 		let tmp = workingTable[i];
 		let j = (i - 1);
-		while (j > 0 && 
-		workingTable[j][TRNS_IDX_IDNUM] >
-		tmp[TRNS_IDX_IDNUM]) {
+		//console.log(`i: ${i}, j: ${j}, tmp: ${tmp}`);
+		while (j >= 0 && 
+		Number(workingTable[j][TRNS_IDX_IDNUM]) >
+		Number(tmp[TRNS_IDX_IDNUM])) {
+			//console.log(`j: ${j}, j_ID: ${Number(workingTable[j][TRNS_IDX_IDNUM])}, tmp_ID:${Number(tmp[TRNS_IDX_IDNUM])}`);
 			workingTable[(j + 1)] = workingTable[j];
 			j--;
 		}
 		workingTable[(j + 1)] = tmp;
 	}
-
+	//console.log(workingTable);
 	return workingTable;
 }//Sort record arrays by ID number
 
 function updateMasterRecords(masterRecords, transactionRecords) {
 	for (let transRecord of transactionRecords) {
+		//console.log(`\ttransRecord: ${transRecord}`);
 		let updateSuccess = false;
 		for (let masterRecord of masterRecords) {
-			let updatedRecord = 
-			updateIndividualMasterRecord(masterRecord,transRecord);	
+			//console.log(`masterRecord: ${masterRecord}`);
+			masterRecord = updateSingleMasterRecord(masterRecord,transRecord);	
 
-			if (updatedRecord !== masterRecord) {
-				masterRecord = updatedRecord;
+			if (true === masterRecord[MSTR_IDX_B_UPDATED]) {
 				updateSuccess = true;
+				masterRecord[MSTR_IDX_B_UPDATED] = false;
+				//console.log(`updateSuccess: ${updateSuccess}`);
+				break;
 			}
 
 			masterRecord = checkCouponStatus(masterRecord);
 		}
+
 		if (false === updateSuccess) {
 			let lFailedIndex = transactionRecords.indexOf(transRecord);
 			logUpdateFailure(lFailedIndex,transRecord);
@@ -132,15 +162,22 @@ function updateMasterRecords(masterRecords, transactionRecords) {
 //Output: updated master record, error file when any transaction record doesn't
 //have a matching master record ID.
 
-function updateIndividualMasterRecord(lMasterRecord, lTransRecord) {
+function updateSingleMasterRecord(lMasterRecord, lTransRecord) {
+	//console.log(`lMasterRecord: ${lMasterRecord}`);
+	//console.log(`lTransRecord: ${lTransRecord}`);
 	if (lMasterRecord[MSTR_IDX_IDNUM] ===
 	    lTransRecord[TRNS_IDX_IDNUM]) {
-		lMasterRecord[MSTR_IDX_SUM_SPENT] +=
-		lTransRecord[TRNS_IDX_TRANSACTION_SUM];
+		lMasterRecord[MSTR_IDX_SUM_SPENT] =
+		(Number(lMasterRecord[MSTR_IDX_SUM_SPENT]) +
+		Number(lTransRecord[TRNS_IDX_TRANSACTION_SUM]));
+		//WTF, javascript, y u no keep numbers as numbers
+		lMasterRecord[MSTR_IDX_COUPONS_USED] =
+		(Number(lMasterRecord[MSTR_IDX_COUPONS_USED]) +
+		Number(lTransRecord[TRNS_IDX_COUPONS_USED]));
 
-		lMasterRecord[MSTR_IDX_COUPONS_USED] +=
-		lTransRecord[TRNS_IDX_COUPONS_USED];
+		lMasterRecord[MSTR_IDX_B_UPDATED] = true;
 	}
+	//console.log(`lMasterRecord: ${lMasterRecord}`);
 	return lMasterRecord;
 }
 
@@ -173,6 +210,6 @@ your ID. Thank you for choosing Curl Up and Dye!`,
 
 function logUpdateFailure(recordIndex, recordData) {
 	IO.appendFileSync(`${ERROR_LOG}`,
-	`ERROR! Record # ${recordIndex} did not have a matching Master ID. The transaction record is: ${recordData}`,
+	`ERROR! Record # ${recordIndex} did not have a matching Master ID. The transaction record is: ${recordData}\n`,
 	`${TEXT_ENCODING}`);
 } //Write error file	
