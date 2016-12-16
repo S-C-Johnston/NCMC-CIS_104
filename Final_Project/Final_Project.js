@@ -3,8 +3,8 @@
 /**
  * @author: Stewart Johnston <johnstons1@student.ncmich.edu>
  * @summary: DIE ROLLA, a dice roller | Created 2016-12-16
- * @version: 2016.12.16.01
- * @todo:
+ * @version: 2016.12.16.29
+ * @todo: Regex for die notation
  */
 
 "use strict";
@@ -38,6 +38,7 @@ const D4 = 4, //Pre-loaded dice face values
       D20 = 20;
 
 const RGX_DIE_STRING_SPLIT = /[dps:]/, //Legal splits for manual input
+      //RGX_DIE_STRING_NOTATION = //,
       RGX_ENG_NOUN_30 = /\b[a-zA-Z0-9]{1,30}\B/,
       RGX_ENG_NOUN = RGX_ENG_NOUN_30;
 
@@ -78,6 +79,7 @@ function interpCLIInput(argArray) {
 		argArray.splice(foundAt,0);
 		console.log(`${argArray}`);
 	}
+	// Check remaining elements against regex that matches notation format, remove any that are found or error if there are none which are legal
 }
 
 function rollDiceAndPrint(lDiceArray) {
