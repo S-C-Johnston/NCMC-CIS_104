@@ -41,6 +41,18 @@ function main() {
 
 main();
 
+function diceStringToArray(lStringToSplit) {
+	console.log(lStringToSplit);
+	let diceArray = lStringToSplit.split(RGX_DIE_STRING_SPLIT);
+	console.log(diceArray);
+
+	let maxFields = (DIE_IDX_S_PRINT + 1);
+	diceArray.length = (maxFields < diceArray.length) ?
+	maxFields : diceArray.length;
+
+	return diceArray;
+}
+
 function inputWholeNumInRange(minValue, maxValue, tries) {
 	const MAX_TRIES = 3;
 	if (MAX_TRIES < tries) {
