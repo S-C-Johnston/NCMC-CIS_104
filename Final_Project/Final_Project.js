@@ -31,7 +31,7 @@ const D4 = 4, //Pre-loaded dice face values
       D20 = 20;
 
 const RGX_DIE_STRING_SPLIT = /[dps:]/, //Legal splits for manual input
-      RGX_ENG_NOUN_30 = /\<[a-zA-Z0-9]{1,30}\>/,
+      RGX_ENG_NOUN_30 = /\b[a-zA-Z0-9]{1,30}\B/,
       RGX_ENG_NOUN = RGX_ENG_NOUN_30;
 
 const MENU_CANCEL_VALUE = 0;
@@ -40,6 +40,18 @@ function main() {
 }
 
 main();
+
+function diceArrayToNotationString(lDiceArray) {
+	let diceString = '';
+	diceString.concat(`${lDiceArray[DIE_IDX_DICE]}`);
+	diceString.concat(`d${lDiceArray[DIE_IDX_SIDES]}`);
+	diceString.concat(`p${lDiceArray[DIE_IDX_P_MOD]}`);
+        diceString.concat(`s${lDiceArray[DIE_IDX_S_MOD]}`);
+	diceString.concat(`:${lDiceArray[DIE_IDX_P_PRINT]}`);
+	diceString.concat(`:${lDiceArray[DIE_IDX_S_PRINT]}`);
+	console.log(`${diceString}`);
+	return diceString;
+}
 
 function diceStringToArray(lStringToSplit) {
 	console.log(lStringToSplit);
@@ -56,7 +68,7 @@ function diceStringToArray(lStringToSplit) {
 function inputWholeNumInRange(minValue, maxValue, tries) {
 	const MAX_TRIES = 3;
 	if (MAX_TRIES < tries) {
-		console.log(`\nThere were too many bad tries. Exiting`)
+		console.log(`\nThere were too many bad tries. Exiting`);
 		process.exit();
 	}
 
