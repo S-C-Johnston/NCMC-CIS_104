@@ -41,6 +41,50 @@ function main() {
 
 main();
 
+function rollDiceAndPrint(lDiceArray) {
+	let dice = lDiceArray[DIE_IDX_DICE];
+	let sides = lDiceArray[DIE_IDX_SIDES];
+	let perRollModifier = lDiceArray[DIE_IDX_P_MOD];
+	let sumModifier = lDiceArray[DIE_IDX_S_MOD];
+	let doPrintPerRoll = lDiceArray[DIE_IDX_P_PRINT];
+	let doPrintSumValue = lDiceArray[DIE_IDX_S_PRINT];
+
+	const RES_IDX_PPR = 0,
+	      RES_IDX_PSV = 1,
+	      RES_IDX_SUM = 2;
+	let rollResults = [doPrintPerRoll,doPrintSumValue,0];
+
+	for (let i = 0; i < dice; i++) {
+		let result = randomIntInclusive(1,sides);
+		result += perRollModifier;
+		rollResults[RES_IDX_SUM] = (Number(rollResults[RES_IDX_SUM]) +
+		               Number(result));
+		rollResults.push(result);
+	}
+	rollResults[RES_IDX_SUM] += Number(sumModifier);
+
+	if (0 !== doPrintPerRoll) {
+		if (0 !== doPrintSumValue) {
+			let sliceStart = (RES_IDX_SUM + 1);
+			console.log(`\nThe rolls were: ${rollResults.slice(sliceStart)} \
+The sum is ${rollResults[RES_IDX_SUM]}`);
+		}
+		else {
+			console.log(`\nThe rolls were: ${rollResults.slice(sliceStart)}`);
+		}
+	}
+
+	return rollResults;
+}
+
+function randomIntInclusive(minValue, maxValue) {
+	minValue = Math.ciel(minValue);
+	maxValue = Math.floor(maxValue);
+	let randInt = (Math.floor(Math.random() *
+	              (maxValue - minValue)) + minValue);
+	return randInt;
+}
+
 function diceArrayToNotationString(lDiceArray) {
 	let diceString = '';
 	diceString.concat(`${lDiceArray[DIE_IDX_DICE]}`);
