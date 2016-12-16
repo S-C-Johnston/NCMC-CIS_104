@@ -48,6 +48,7 @@ function rollDiceAndPrint(lDiceArray) {
 	let sumModifier = lDiceArray[DIE_IDX_S_MOD];
 	let doPrintPerRoll = lDiceArray[DIE_IDX_P_PRINT];
 	let doPrintSumValue = lDiceArray[DIE_IDX_S_PRINT];
+	sides = (0 === sides) ? D6 : sides ;
 
 	const RES_IDX_PPR = 0,
 	      RES_IDX_PSV = 1,
@@ -131,3 +132,24 @@ function inputWholeNumInRange(minValue, maxValue, tries) {
 	let returnVal = Math.floor(lUserInput);
 	return returnVal;
 } //Returns whole number user input, floors if a floating point
+
+function printHelp() {
+	console.log(`
+Arguments: --help, (-i || --individual), (-s || --sum), XdNpMsM:P:S [...]
+--help: Display XdNpMsM:P:S notation rules, CLI options
+-s, --sum: Show sum value of dice rolled, default behavior
+-i, --individual: Show value of each die individually, sum must be specified
+
+Dice notation (XdNpMsM:P:S)
++ X: Numeric, Number of dice, hereafter "dice"
++ d: Human readable notation separating dice and value
++ N: Numeric, Maximum value of die, herafter "sides"
++ p: Human readable notation separating value and per-die modifier
++ M: see below
++ s: Human readable notation separating value and sum modifier
++ M: Numeric, Modifier to add to results, hereafter "mod"
++ P: Show per-roll value, precludes sum unless specified. Any non-zero
++ S: Show sum value, default. Only used if P is also used. Any non-zero
++ :  Human readable notation separating values. Can be used in place of other separators, if you're feeling dangerous
+`);
+}
