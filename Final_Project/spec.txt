@@ -1,0 +1,113 @@
+DIE ROLLA!
+
+A dice roller program. Should accept XdNpMsM:P:S notation dice rolls as CLI
+parameters, where X is the number of dice, N is the maximum face value of those
+dice, and M is a modifier to the total. Die values must always be discrete
+whole numbers. The CLI interface may or may not accept any whole value for dice
+randomness. If multiple parameters, each should have its own line for output.
+
+-	XdNpMsM:P:S
+	+ X: Numeric, Number of dice, hereafter "dice"
+	+ d: Human readable notation separating dice and value
+	+ N: Numeric, Maximum value of die, herafter "sides"
+	+ s: Human readable notation separating value and sum modifier
+	+ M: see below
+	+ p: Human readable notation separating value and per-die modifier
+	+ M: Numeric, Modifier to add to results, hereafter "mod"
+	+ P: Show per-roll value, precludes sum unless specified
+	+ S: Show sum value, default
+	+ :  Human readable notation separating values. Can be used in place of other separators, if you're feeling dangerous
+-	Dice face values are whole numbers
+-	Manual input possible
+-	Output a separate line for each die roll parameter
+
+CLI: --help, (-i || --individual), (-s || --sum), XdNpMsM:P:S [...]
+- --help: Display XdNpMsM:P:S notation rules, CLI options
+- -s, --sum: Show sum value of dice rolled, default behavior
+- -i, --individual: Show value of each die individually, sum must be specified
+
+If no parameters, enter a UI with a hand-holding guided dice roll builder. d4,
+d6, d8, d10, d12, d20, and d100 should be preloaded in a menu, manual input may
+or may not be available. Die rolls should be allowed to be combined into sets.
+Dice sets should have the option to be saved to a configuration file with a
+custom name for the set.  
+
+-	Main menu: 0 = exit, 1 = roll saved sets, 2 = roll dice menu, 3 = Set builder, 4? = manual input
+	0 Process exit
+	1 Selection menu of saved sets
+		0 Cancel
+		1,.. selection menu with set name printed with notation
+
+	2 Guided dice roller. Immediately roll any valid combinations, show
+	  individual as well as sum. Should save the set as the user goes,
+	  prompt to save when no answered to "Continue?".
+	    1)
+	        0 Cancel
+	        1,.. Manual input of number of dice
+
+	    2) Selection menu w/ dice values
+	        0 Cancel
+	        1 d4
+	        2 d6
+	        3 d8
+	        4 d10
+	        5 d12
+	        6 d20
+	        7 d100
+	        8 ? manual perhaps?
+	    3) Continue prompt
+	        0 No
+	        1 Yes
+
+	3 Set builder
+	    0 Cancel
+	    1 Roll w/ current settings
+	    2 Save current settings
+		0 Cancel
+	        - Name prompt
+	    3 Individual, sum, both? (Sum only by default)
+	        0 Cancel
+		1 Indvidual only
+		2 Sum only
+		3 Both
+	    4 Number of dice
+	    5 Selection menu w/ dice values
+	        0 Cancel
+	        1 d4
+	        2 d6
+	        3 d8
+	        4 d10
+	        5 d12
+	        6 d20
+	        7 d100
+	        8? manual perhaps?
+	    6 Add modifier
+	        0 Cancel
+		1,.. Numeric input
+	    7 Add another die roll to set
+	    8 Choose set to edit: as per M-1
+
+	4? Manual input? As per CLI parameters, loops unless cancelled
+	    0 Cancel
+
+Configuration file should contain saved sets, one per line, in csv format for
+simplicity. A saved set should contain: 0 Name, 1 Number of rolls, 2
+Individual, Sum, Both, 3 Number of rolls, 4
+([dice,sides,perMod,sumMod,perRoll,sum],etc,..)
+
+
+
+Needs: 
+-	Proper code layout
+-	Variable declaration and initialization
+-	Constant declaration and initialization
+-	Collections
+-	Modularization
+-	Dispatching
+-	Command line arguments
+-	Program sequence and selection
+-	Cohesion
+-	File I/O
+-	Parameters and return values
+-	Input validation and sanitization
+-	Good programming practices
