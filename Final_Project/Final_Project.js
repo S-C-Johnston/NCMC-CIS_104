@@ -41,3 +41,25 @@ function main() {
 
 main();
 
+function inputWholeNumInRange(minValue, maxValue, tries) {
+	const MAX_TRIES = 3;
+	if (MAX_TRIES < tries) {
+		console.log(`\nThere were too many bad tries. Exiting`)
+		process.exit();
+	}
+
+	let lUserInput = PROMPT.question(`\nPlease input a whole number between ${minValue} and ${maxValue} => `);
+
+	if ((true === isNaN(lUserInput)) ||
+	(lUserInput < minValue) ||
+	(maxValue < lUserInput)) {
+		console.log(`\nError! Your input was either not a number or out of range. Please try again.`);
+		tries = (undefined !== tries) ? tries + 1 : 0 ;
+		let triesLeft = (MAX_TRIES - tries);
+		console.log(`You have ${triesLeft} tries remaining.`);
+		inputWholeNumInRange(minValue,maxValue,tries);
+	}
+
+	let returnVal = Math.floor(lUserInput);
+	return returnVal;
+} //Returns whole number user input, floors if a floating point
