@@ -10,9 +10,9 @@ randomness. If multiple parameters, each should have its own line for output.
 	+ X: Numeric, Number of dice, hereafter "dice"
 	+ d: Human readable notation separating dice and value
 	+ N: Numeric, Maximum value of die, herafter "sides"
-	+ s: Human readable notation separating value and sum modifier
-	+ M: see below
 	+ p: Human readable notation separating value and per-die modifier
+	+ M: see below
+	+ s: Human readable notation separating value and sum modifier
 	+ M: Numeric, Modifier to add to results, hereafter "mod"
 	+ P: Show per-roll value, precludes sum unless specified
 	+ S: Show sum value, default
@@ -24,7 +24,7 @@ randomness. If multiple parameters, each should have its own line for output.
 CLI: --help, (-i || --individual), (-s || --sum), XdNpMsM:P:S [...]
 - --help: Display XdNpMsM:P:S notation rules, CLI options
 - -s, --sum: Show sum value of dice rolled, default behavior
-- -i, --individual: Show value of each die individually, sum must be specified
+- -p, --per-roll: Show value of roll, sum must be specified
 
 If no parameters, enter a UI with a hand-holding guided dice roll builder. d4,
 d6, d8, d10, d12, d20, and d100 should be preloaded in a menu, manual input may
@@ -92,7 +92,7 @@ custom name for the set.
 
 Configuration file should contain saved sets, one per line, in csv format for
 simplicity. A saved set should contain: 0 Name, 1 Number of rolls, 2
-Individual, Sum, Both, 3 Number of rolls, 4
+Per-roll print, 3 Sum print, 4
 ([dice,sides,perMod,sumMod,perRoll,sum],etc,..)
 
 

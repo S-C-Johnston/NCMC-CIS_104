@@ -10,6 +10,13 @@
 "use strict";
 const PROMPT = require('readline-sync');
 
+const CLI_SHORT_PER_ROLL = "-p",
+      CLI_LONG_PER_ROLL = "--per-roll",
+      CLI_SHORT_PRINT_SUM = "-s",
+      CLI_LONG_PRINT_SUM = "--sum",
+      CLI_SHORT_HELP = "-h",
+      CLI_LONG_HELP = "--help";
+
 const SET_IDX_NAME = 0, //Name of set
       SET_IDX_NUM_ROLLS = 1, //Number of rolls in the set
       SET_IDX_P_PRINT = 2, //Per-roll value print boolean
@@ -41,6 +48,38 @@ function main() {
 
 main();
 
+function prepCLIInput() {
+	let usefulInput = process.argv.slice(2);
+	console.log(`${usefulInput}`);
+	return usefulInput;
+}
+
+function interpCLIInput(argArray) {
+	if (true === argArray.includes(`${CLI_SHORT_HELP}` || `${CLI_LONG_HELP}`)) {
+		printHelp();
+		process.exit();
+	}
+	console.log(`${argArray}`);
+
+	let overridePrintPerRoll = false;
+	let overridePrintSum = true;
+
+	if (true === argArray.includes(`${CLI_SHORT_PER_ROLL}` || `${CLI_LONG_PER_ROLL}`)) {
+		overridePrintPerRoll = true;
+		overridePrintSum = false;
+		let foundAt = argArray.indexOf(`${CLI_SHORT_PER_ROLL}` || `${CLI_LONG_PER_ROLL}`);
+		argArray.splice(foundAt,0);
+		console.log(`${argArray}`);
+	}
+
+	if (true === argArray.inludes(`${CLI_SHORT_PRINT_SUM}` || `${CLI_LONG_PRINT_SUM}`)) {
+		overridePrintSum = true;
+		let foundAt = argArray.indexOf(`${CLI_SHORT_PRINT_SUM}` || `${CLI_LONG_PRINT_SUM}`);
+		argArray.splice(foundAt,0);
+		console.log(`${argArray}`);
+	}
+}
+
 function rollDiceAndPrint(lDiceArray) {
 	let dice = lDiceArray[DIE_IDX_DICE];
 	let sides = lDiceArray[DIE_IDX_SIDES];
@@ -65,8 +104,8 @@ function rollDiceAndPrint(lDiceArray) {
 	rollResults[RES_IDX_SUM] += Number(sumModifier);
 
 	if (0 !== doPrintPerRoll) {
+		let sliceStart = (RES_IDX_SUM + 1);
 		if (0 !== doPrintSumValue) {
-			let sliceStart = (RES_IDX_SUM + 1);
 			console.log(`\nThe rolls were: ${rollResults.slice(sliceStart)} \
 The sum is ${rollResults[RES_IDX_SUM]}`);
 		}
@@ -135,10 +174,13 @@ function inputWholeNumInRange(minValue, maxValue, tries) {
 
 function printHelp() {
 	console.log(`
-Arguments: --help, (-i || --individual), (-s || --sum), XdNpMsM:P:S [...]
---help: Display XdNpMsM:P:S notation rules, CLI options
--s, --sum: Show sum value of dice rolled, default behavior
--i, --individual: Show value of each die individually, sum must be specified
+Arguments: (${CLI_SHORT_HELP} || ${CLI_LONG_HELP}), \
+(${CLI_SHORT_PER_ROLL} || ${CLI_LONG_PER_ROLL}), \
+(${CLI_SHORT_PRINT_SUM} || ${CLI_LONG_PRINT_SUM}), \
+XdNpMsM:P:S [...]
+${CLI_SHORT_HELP} ${CLI_LONG_HELP}): Display XdNpMsM:P:S notation rules, CLI options
+${CLI_SHORT_PRINT_SUM} ${CLI_LONG_PRINT_SUM}: Show sum value of dice rolled, default behavior
+${CLI_SHORT_PER_ROLL} ${CLI_LONG_PER_ROLL}: Show value of roll, sum must be specified
 
 Dice notation (XdNpMsM:P:S)
 + X: Numeric, Number of dice, hereafter "dice"
