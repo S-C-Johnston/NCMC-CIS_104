@@ -37,10 +37,30 @@ const D4 = 4, //Pre-loaded dice face values
       D12 = 12,
       D20 = 20;
 
-const RGX_DIE_STRING_SPLIT = /[dps:]/, //Legal splits for manual input
-      //RGX_DIE_STRING_NOTATION = //,
-      RGX_ENG_NOUN_30 = /\b[a-zA-Z0-9]{1,30}\B/,
+const RGX_ENG_NOUN_30 = /\b[a-zA-Z0-9]{1,30}\B/,
       RGX_ENG_NOUN = RGX_ENG_NOUN_30;
+      //RGX_DIE_STRING_NOTATION = //,
+const DIE_STRING_SPLIT = "dps:", //Legal splits for manual input
+      RGX_DIE_STRING_SPLIT = new RegExp(`[${DIE_STRING_SPLIT}]`),
+      DICE_ATOM_SPLIT = (`[${DIE_STRING_SPLIT}]{1}`),
+      DICE_GROUP_DIGIT = (`(${DICE_ATOM_SPLIT}[\d]*)`),
+      DICE_GROUP_CHAR = (`(${DICE_ATOM_SPLIT}[\d\w]*)`),
+      RGX_DICE_NOTATION = new RegExp(
+	`\b[\d]+(` + //Match must start w/ some # digits. Only required portion.
+	`(${DICE_GROUP_DIGIT}` +  //A group ([dps:]{1}[\d]*): require as part
+//of the group exactly one field separator and zero or more digits. If no digits,
+//default relevant value to zero when parsed
+	`(${DICE_GROUP_DIGIT}` +
+	`(${DICE_GROUP_DIGIT}` +
+	`(${DICE_GROUP_CHAR}` + //A group ([dps:]{1}[\w\d]*): As above, but
+//with any useful character. Non-zero will be parsed as "true" for this value.
+	`(${DICE_GROUP_CHAR}` +
+	`)?)?)?)?)?)?` //Optional inclusions that match up, making each group
+//optional but dependent upon there being the next group in front of it.
+	); //EUREKA! Ugly, but it works exactly the way I want it to.
+// ^ That whole monstrosity should come out as:
+// /\b[\d]+(([dps:]{1}[\d]*)(([dps:]{1}[\d]*)(([dps:]{1}[\d]*)(([dps:{1}[\w\d]*)([dps:]{1}[\w\d]*)?)?)?)?)?/
+// It adequately matches the XdNpMsM:P:S notation used for user facing notation
 
 const MENU_CANCEL_VALUE = 0;
 
