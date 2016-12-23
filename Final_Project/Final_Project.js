@@ -35,7 +35,8 @@ const D4 = 4, //Pre-loaded dice face values
       D8 = 8,
       D10 = 10,
       D12 = 12,
-      D20 = 20;
+      D20 = 20,
+      MIN_REAL_VALUE = 1;
 
 const RGX_ENG_NOUN_30 = /\b[a-zA-Z0-9]{1,30}\B/,
       RGX_ENG_NOUN = RGX_ENG_NOUN_30;
@@ -145,6 +146,43 @@ function randomIntInclusive(minValue, maxValue) {
 	let randInt = (Math.floor(Math.random() *
 	              (maxValue - minValue)) + minValue);
 	return randInt;
+}
+
+function sanitizeDiceArray(lDiceArray) {
+	//Assumes that array has valid values, which are digits or undefined
+	//for all but the PRINT indexes, which accept any non-zero or non-false
+	//as true. This just makes sure that valid inputs are cleaned up for
+	//use, like defaulting undefined values to 0.
+
+	for (let idx = DIE_IDX_DICE; idx <= DIE_IDX_S_PRINT; idx++) {
+		lDiceArray[idx] = (undefined === lDiceArray[idx])
+			? 0
+			: lDiceArray[idx];
+	} //If any array position is undefined, it gets zero'd. DRY.
+
+	lDiceArray[DIE_IDX_DICE] = (MIN_REAL_VALUE > lDiceArray[DIE_IDX_DICE])
+		? MIN_REAL_VALUE
+		: lDiceArray[DIE_IDX_DICE];
+	//Number of dice to roll can't be less than the minimum real value,
+	//which is 1. Duh
+
+	lDiceArray[DIE_IDX_SIDES] = ((MIN_REAL_VALUE >=
+	                            lDiceArray[DIE_IDX_SIDES]))
+		? D6
+		: lDiceArray[DIE_IDX_SIDES];
+	//Can't have 1 or fewer sides of dice, default it to D6
+
+	lDiceArray[DIE_IDX_P_PRINT] = ((0 !== lDiceArray[DIE_IDX_P_PRINT]) ||
+	                              (false !== lDiceArray[DIE_IDX_P_PRINT]))
+		? true
+		: false;
+	//If defined to anything other than zero or fale, make it true
+
+	lDiceArray[DIE_IDX_S_PRINT] = ((0 !== lDiceArray[DIE_IDX_S_PRINT]) ||
+	                              (false !== lDiceArray[DIE_IDX_S_PRINT]))
+		? true
+		: false;
+	//If defined to anything other than zero or fale, make it true
 }
 
 function diceArrayToNotationString(lDiceArray) {
