@@ -110,9 +110,8 @@ function rollDiceAndPrint(lDiceArray) {
 	let sumModifier = lDiceArray[DIE_IDX_S_MOD];
 	let doPrintPerRoll = lDiceArray[DIE_IDX_P_PRINT];
 	let doPrintSumValue = lDiceArray[DIE_IDX_S_PRINT];
-	sides = (0 === sides) ? D6 : sides ;
 
-	const RES_IDX_PPR = 0,
+	const RES_IDX_PPR = 0, //Result array indexes
 	      RES_IDX_PSV = 1,
 	      RES_IDX_SUM = 2;
 	let rollResults = [doPrintPerRoll,doPrintSumValue,0];
@@ -126,11 +125,18 @@ function rollDiceAndPrint(lDiceArray) {
 	}
 	rollResults[RES_IDX_SUM] += Number(sumModifier);
 
-	if (0 !== doPrintPerRoll) {
+
+	if (false === doPrintPerRoll) {
+		console.log(`The sum is: ${rollResults[RES_IDX_SUM]}`);
+		//I think it most likely that users will want to just print the
+		//sum, so this is the cheapest "highest level of truthiness"
+		//for this test.
+	}
+	else {
 		let sliceStart = (RES_IDX_SUM + 1);
-		if (0 !== doPrintSumValue) {
-			console.log(`\nThe rolls were: ${rollResults.slice(sliceStart)} \
-The sum is ${rollResults[RES_IDX_SUM]}`);
+		if (false !== doPrintSumValue) {
+			console.log(`\nThe rolls were: ${rollResults.slice(sliceStart)} ` +
+			`The sum is: ${rollResults[RES_IDX_SUM]}`);
 		}
 		else {
 			console.log(`\nThe rolls were: ${rollResults.slice(sliceStart)}`);
